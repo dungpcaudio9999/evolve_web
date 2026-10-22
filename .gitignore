@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+.next/
+out/
+*.tsbuildinfo
+
+# Env (chỉ commit .env.example)
+.env
+.env.*
+!.env.example
+
+# Test
+coverage/
+playwright-report/
+test-results/
+
+# Logs, OS, editor
+*.log
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
