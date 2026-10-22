@@ -39,6 +39,7 @@ git clone https://github.com/dungpcaudio9999/evolve_web.git
 cd evolve_web
 corepack enable
 pnpm install
+docker compose up -d   # PostgreSQL ở localhost:5432 (user/pass/db: evolve)
 pnpm dev            # build packages/shared rồi chạy song song mọi app có script dev
 ```
 <!-- TODO(A): bổ sung bước docker compose, migrate, seed khi apps/api có Prisma (W2) -->
@@ -57,7 +58,15 @@ Các script ở thư mục gốc (chạy cho mọi package có script tương �
 Chạy riêng một package: `pnpm --filter web dev`, `pnpm --filter api dev`, `pnpm --filter @evolve/shared build`.
 
 ## Biến môi trường
-<!-- TODO(A): liệt kê theo .env.example của web và api -->
+Mẫu đầy đủ ở [.env.example](.env.example). Không commit file `.env` thật.
+
+| App | Biến | Mặc định ở local |
+|---|---|---|
+| gốc (docker) | `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB`, `POSTGRES_PORT` | `evolve`, `evolve`, `evolve`, `5432` |
+| api | `DATABASE_URL` | `postgresql://evolve:evolve@localhost:5432/evolve?schema=public` |
+| api | `JWT_SECRET`, `JWT_EXPIRES_IN` | tự đặt, `7d` |
+| api | `PORT`, `CORS_ORIGIN` | `4000`, `http://localhost:3000` |
+| web | `NEXT_PUBLIC_API_URL` | `http://localhost:4000` |
 
 ## Tài liệu
 - [PLAN.md](PLAN.md): kế hoạch tổng
