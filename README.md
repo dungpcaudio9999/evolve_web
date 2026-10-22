@@ -29,13 +29,32 @@ evolve_web/
 Mỗi thư mục lớn có `README.md` riêng giải thích vai trò.
 
 ## Yêu cầu
-<!-- TODO(A): phiên bản Node.js, pnpm, Docker -->
+- Node.js ≥ 20.11 (khuyến nghị 22, xem `.nvmrc`)
+- pnpm 10: bật bằng `corepack enable` (phiên bản ghim trong `packageManager` của `package.json`)
+- Docker + Docker Compose (để chạy PostgreSQL ở local)
 
 ## Cài đặt và chạy
-<!-- TODO(A, W1-A2): các lệnh clone, pnpm install, docker compose up, migrate, seed, pnpm dev -->
 ```bash
-# TODO
+git clone https://github.com/dungpcaudio9999/evolve_web.git
+cd evolve_web
+corepack enable
+pnpm install
+pnpm dev            # build packages/shared rồi chạy song song mọi app có script dev
 ```
+<!-- TODO(A): bổ sung bước docker compose, migrate, seed khi apps/api có Prisma (W2) -->
+
+Các script ở thư mục gốc (chạy cho mọi package có script tương ứng):
+
+| Lệnh | Việc |
+|---|---|
+| `pnpm dev` | Chạy dev cho web, api và shared (watch) |
+| `pnpm build` | Build mọi package |
+| `pnpm lint` | Lint |
+| `pnpm typecheck` | Kiểm tra type |
+| `pnpm test` | Chạy test |
+| `pnpm format` | Format bằng Prettier |
+
+Chạy riêng một package: `pnpm --filter web dev`, `pnpm --filter api dev`, `pnpm --filter @evolve/shared build`.
 
 ## Biến môi trường
 <!-- TODO(A): liệt kê theo .env.example của web và api -->
