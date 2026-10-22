@@ -20,11 +20,15 @@ test('createIssueSchema điền mặc định status/priority/labelIds', () => {
 
 test('createIssueSchema từ chối tiêu đề rỗng và status sai', () => {
   assert.ok(!shared.createIssueSchema.safeParse({ title: ' ', projectId: 'p1' }).success);
-  assert.ok(!shared.createIssueSchema.safeParse({ title: 'a', projectId: 'p1', status: 'X' }).success);
+  assert.ok(
+    !shared.createIssueSchema.safeParse({ title: 'a', projectId: 'p1', status: 'X' }).success,
+  );
 });
 
 test('registerSchema chuẩn hóa email, yêu cầu mật khẩu ≥ 8 ký tự', () => {
   const r = shared.registerSchema.parse({ name: 'An', email: ' A@B.COM ', password: '12345678' });
   assert.strictEqual(r.email, 'a@b.com');
-  assert.ok(!shared.registerSchema.safeParse({ name: 'An', email: 'a@b.com', password: '123' }).success);
+  assert.ok(
+    !shared.registerSchema.safeParse({ name: 'An', email: 'a@b.com', password: '123' }).success,
+  );
 });
