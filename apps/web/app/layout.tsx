@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+    <html lang="vi" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className="antialiased">
         <TooltipProvider>{children}</TooltipProvider>
       </body>
     </html>
