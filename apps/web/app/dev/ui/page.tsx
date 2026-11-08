@@ -5,6 +5,8 @@ import { PRIORITIES, STATUSES } from '@evolve/shared';
 import { PriorityIcon } from '@/components/common/priority-icon';
 import { StatusIcon } from '@/components/common/status-icon';
 import { UserAvatar } from '@/components/common/user-avatar';
+import { IssueLine } from '@/components/issues/issue-line';
+import { SAMPLE_ISSUES, SAMPLE_USERS } from '@/lib/sample-data';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -111,6 +113,19 @@ export default function DevUiPage() {
         <UserAvatar user={{ name: 'Trần Bình', avatarUrl: null }} size={32} />
         <UserAvatar user={null} />
       </Section>
+
+      <section className="space-y-3">
+        <h2 className="text-sm font-medium text-muted-foreground">issue-line</h2>
+        <div className="overflow-hidden rounded-lg border">
+          {SAMPLE_ISSUES.slice(0, 4).map((issue) => (
+            <IssueLine
+              key={issue.id}
+              issue={issue}
+              assignee={SAMPLE_USERS.find((u) => u.id === issue.assigneeId) ?? null}
+            />
+          ))}
+        </div>
+      </section>
 
       <Separator />
       <h2 className="font-heading text-lg font-semibold">UI</h2>
