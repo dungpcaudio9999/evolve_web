@@ -16,10 +16,11 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 ## File dự kiến
 | File | URL | Vai trò | Người làm · Task |
 |---|---|---|---|
-| `layout.tsx` | – | Layout gốc: font, theme, `<Toaster />` | A · W2-A3 |
+| `layout.tsx` | – | Layout gốc: font, theme, `<TooltipProvider>` (đã có), `<Toaster />` | A · W2-A3 |
 | `globals.css` | – | Design system taalas (màu, bo góc, `text-gradient`) | A · W2-A2 |
 | `page.tsx` | `/` | Hiện tại: trang tạm (W1-C1). Sẽ chuyển hướng sang `/issues` | C · W2-C2 |
 | `not-found.tsx` | – | Trang 404 | A |
+| `dev/ui/page.tsx` ✅ | `/dev/ui` | Xem thử component UI và common | C · W1-C2, W1-C3 |
 | `(auth)/layout.tsx` | – | Layout cho trang đăng nhập/đăng ký | A · W3-A1 |
 | `(auth)/login/page.tsx` | `/login` | Đăng nhập | A · W3-A1 |
 | `(auth)/register/page.tsx` | `/register` | Đăng ký | A · W3-A1 |

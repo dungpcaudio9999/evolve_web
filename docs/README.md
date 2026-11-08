@@ -27,9 +27,7 @@ Sau khi khởi tạo app (W1-C1, W1-B2), người phụ trách copy khung vào �
 
 | Khung | Copy vào | Người điền |
 |---|---|---|
-| `readme-templates/web-components.md` | `apps/web/components/README.md` | C |
 | `readme-templates/web-store.md` | `apps/web/store/README.md` | C |
-| `readme-templates/web-lib.md` | `apps/web/lib/README.md` | C |
 | `readme-templates/api-prisma.md` | `apps/api/prisma/README.md` | B |
 
 Copy xong thì xóa khung tương ứng trong `readme-templates/`. Khi thư mục này trống thì xóa luôn.
