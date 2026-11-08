@@ -24,9 +24,9 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `common/`: component nhỏ dùng nhiều nơi · C
 | File | Vai trò | Task |
 |---|---|---|
-| `status-icon.tsx` | Icon theo trạng thái | W1-C3 |
-| `priority-icon.tsx` | Icon theo độ ưu tiên | W1-C3 |
-| `user-avatar.tsx` | Avatar người dùng | W1-C3 |
+| `status-icon.tsx` ✅ | Icon theo trạng thái, màu từ `STATUS_BY_ID` | W1-C3 |
+| `priority-icon.tsx` ✅ | Icon theo độ ưu tiên (`currentColor`; Urgent màu destructive) | W1-C3 |
+| `user-avatar.tsx` ✅ | Avatar: ảnh, chữ cái đầu (`getInitials`), hoặc vòng nét đứt khi chưa giao | W1-C3 |
 | `empty-state.tsx` | Hiển thị khi không có dữ liệu | W6-C1 |
 
 ### `issues/`: tính năng issue · C (riêng `filter-bar` do A làm)

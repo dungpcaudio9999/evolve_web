@@ -1,6 +1,10 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import { PRIORITIES, STATUSES } from '@evolve/shared';
+import { PriorityIcon } from '@/components/common/priority-icon';
+import { StatusIcon } from '@/components/common/status-icon';
+import { UserAvatar } from '@/components/common/user-avatar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -49,7 +53,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** Trang xem thử component trong lúc phát triển (W1-C2). Không dùng cho người dùng cuối. */
+/** Trang xem thử component trong lúc phát triển (W1-C2, W1-C3). Không dùng cho người dùng cuối. */
 export default function DevUiPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-8 p-8">
@@ -59,6 +63,36 @@ export default function DevUiPage() {
           12 component shadcn/ui dùng trong Evolve Web.
         </p>
       </header>
+
+      <h2 className="text-lg font-semibold">components/common</h2>
+
+      <Section title="status-icon">
+        {STATUSES.map((s) => (
+          <span key={s.id} className="flex items-center gap-1.5 text-sm">
+            <StatusIcon status={s.id} />
+            {s.name}
+          </span>
+        ))}
+      </Section>
+
+      <Section title="priority-icon">
+        {PRIORITIES.map((p) => (
+          <span key={p.id} className="flex items-center gap-1.5 text-sm">
+            <PriorityIcon priority={p.id} />
+            {p.name}
+          </span>
+        ))}
+      </Section>
+
+      <Section title="user-avatar">
+        <UserAvatar user={{ name: 'Nguyễn Văn An', avatarUrl: null }} />
+        <UserAvatar user={{ name: 'shadcn', avatarUrl: 'https://github.com/shadcn.png' }} />
+        <UserAvatar user={{ name: 'Trần Bình', avatarUrl: null }} size={32} />
+        <UserAvatar user={null} />
+      </Section>
+
+      <Separator />
+      <h2 className="text-lg font-semibold">components/ui</h2>
 
       <Section title="button">
         <Button>Primary</Button>
