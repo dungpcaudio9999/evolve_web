@@ -1,6 +1,6 @@
 # apps/api/src/modules: Module nghiệp vụ
 
-> Copy vào `apps/api/src/modules/README.md` · Người điền: **B**
+> Người phụ trách: **B**
 
 ## Mục đích
 Mỗi thư mục là một **module NestJS** phụ trách một nhóm chức năng.
@@ -23,6 +23,7 @@ Request → JwtAuthGuard → Controller (validate DTO) → Service → PrismaSer
 ## Danh sách module
 | Module | Endpoint | Vai trò | Task |
 |---|---|---|---|
+| `health/` ✅ | `GET /health` | Kiểm tra API còn sống | W1-B2 |
 | `auth/` | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | Đăng ký, đăng nhập, JWT strategy và guard | W3-B1 |
 | `users/` | `GET /users` | Danh sách người dùng (để chọn assignee) | W4-B2 |
 | `projects/` | `GET/POST /projects`, `GET/PATCH/DELETE /projects/:id` | CRUD project của người dùng hiện tại | W3-B2 |
@@ -33,4 +34,5 @@ Request → JwtAuthGuard → Controller (validate DTO) → Service → PrismaSer
 - Controller mỏng, logic đặt trong service.
 - Mọi route (trừ `auth/register`, `auth/login`, `health`) đều cần JWT.
 - Chỉ trả về dữ liệu thuộc về người dùng hiện tại.
-<!-- TODO(B): bổ sung -->
+- Module mới đăng ký trong `src/app.module.ts` (mảng `imports`).
+- Tạo nhanh khung module: `pnpm --filter api exec nest g resource modules/<tên> --no-spec` rồi chỉnh theo cấu trúc trên.
