@@ -10,7 +10,7 @@
 |---|---|---|
 | `schema.prisma` ✅ | Định nghĩa model và enum | W2-B1 |
 | `migrations/` ✅ | Migration do Prisma sinh, **không sửa tay** (`20261108100546_init`) | W2-B1 |
-| `seed.ts` | Dữ liệu mẫu: 3 users, 2 projects, khoảng 30 issues, 5 labels | W2-B2 |
+| `seed.ts` ✅ | Dữ liệu mẫu: 3 users, 2 projects (EVO, MOB), 30 issues, 5 labels. **Xóa dữ liệu cũ** rồi nạp lại | W2-B2 |
 
 ## Model
 Tên bảng và cột trong DB dùng `snake_case` (`@@map`, `@map`); trong code dùng `camelCase`.
@@ -32,11 +32,23 @@ Khi tạo issue (W4-B1): trong một transaction, tăng `Project.issueCounter` l
 - `passwordHash`, `issueCounter`, `number` chỉ có ở DB, **không** trả về qua API.
 - `Issue.labels` trong contract là `Label[]`; trong DB đi qua bảng nối `IssueLabel`.
 
+## Dữ liệu mẫu (seed)
+| Tài khoản | Mật khẩu | Ghi chú |
+|---|---|---|
+| `an@evolve.dev` (Nguyễn Văn An) | `password123` | Chủ của cả 2 project |
+| `binh@evolve.dev` (Trần Thị Bình) | `password123` | Được giao issue |
+| `chi@evolve.dev` (Lê Minh Chi) | `password123` | Được giao issue |
+
+- Project `EVO` (Evolve Web) và `MOB` (Mobile App), mỗi project 15 issue phủ đủ 5 trạng thái và 5 độ ưu tiên.
+- `rank` sinh bằng `@kayron013/lexorank`: mỗi cột bắt đầu từ `0|i` rồi tăng dần (`0|j`, `0|k`…).
+- Mật khẩu băm bằng `bcryptjs` (thuần JS, tương thích bcrypt, không cần biên dịch native).
+
 ## Lệnh
 ```bash
 # Lần đầu: chạy PostgreSQL (docker compose up -d) và tạo apps/api/.env từ .env.example
 pnpm --filter api db:migrate                        # áp migration vào DB local (tự chạy prisma generate)
 pnpm --filter api db:migrate --name <tên>           # tạo migration mới sau khi sửa schema (chỉ B)
+pnpm --filter api db:seed                           # XÓA dữ liệu cũ, nạp dữ liệu mẫu
 pnpm --filter api db:studio                         # xem dữ liệu ở http://localhost:5555
 pnpm --filter api db:reset                          # XÓA toàn bộ dữ liệu và chạy lại migration
 pnpm --filter api db:deploy                         # áp migration trên môi trường deploy (không tạo mới)
