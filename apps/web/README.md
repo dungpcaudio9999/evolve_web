@@ -1,6 +1,6 @@
 # apps/web: Frontend
 
-> Copy vào `apps/web/README.md` sau W1-C1 · Người điền: **C** · Phát triển: **A**, **C**
+> Người phụ trách: **C** · Phát triển: **A**, **C** · Khởi tạo ở W1-C1 (Next.js 15.5, React 19.1, Tailwind v4)
 
 ## Mục đích
 Ứng dụng giao diện người dùng: hiển thị và thao tác với issue, project; đăng nhập; gọi REST API của `apps/api`.
@@ -28,21 +28,25 @@
 | Biến | Ví dụ | Ý nghĩa |
 |---|---|---|
 | `NEXT_PUBLIC_API_URL` | `http://localhost:4000` | Địa chỉ API |
-<!-- TODO(C): bổ sung nếu có -->
+Tạo file từ mẫu: `cp apps/web/.env.example apps/web/.env.local`. Biến `NEXT_PUBLIC_*` được đưa vào code chạy trên trình duyệt, **không** đặt bí mật ở đây.
 
 ## Lệnh
 ```bash
-pnpm --filter web dev        # chạy ở http://localhost:3000
+pnpm --filter @evolve/shared build   # cần build contract trước (pnpm dev ở gốc đã tự làm)
+pnpm --filter web dev        # chạy ở http://localhost:3000 (Turbopack)
 pnpm --filter web build
+pnpm --filter web start      # chạy bản build
 pnpm --filter web lint
+pnpm --filter web typecheck  # sinh type cho route (next typegen) rồi chạy tsc
 ```
-<!-- TODO(C): xác nhận lại sau khi khởi tạo -->
 
 ## Luồng dữ liệu
 ```text
 Component ──gọi hàm──► Store (Zustand) ──► lib/api-client ──HTTP──► apps/api
 ```
-<!-- TODO(C): giải thích ngắn -->
+- Component chỉ đọc state và gọi hàm của store; **không** gọi `fetch` trực tiếp.
+- Store (Zustand) gọi `lib/api-client.ts`, client này gắn token và xử lý lỗi.
+- Kiểu dữ liệu, hằng số (`STATUSES`, `PRIORITIES`) và zod schema lấy từ `@evolve/shared`.
 
 ## Liên quan
 - Phân vai: [docs/ROLES.md](../../docs/ROLES.md) · Task: W1-C1…W6-C2 trong [docs/TIMELINE.md](../../docs/TIMELINE.md)
