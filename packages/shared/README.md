@@ -32,7 +32,7 @@ Quy ước chung: `id` là string (cuid/uuid do Prisma sinh); thời gian là ch
 |---|---|
 | `User` | `id`, `name`, `email`, `avatarUrl \| null`, `createdAt`. **Không** có `passwordHash` |
 | `AuthResponse` | `accessToken`, `user: User` (trả về từ `/auth/register`, `/auth/login`) |
-| `Project` | `id`, `name`, `icon \| null`, `color` (hex), `ownerId`, `createdAt`, `updatedAt` |
+| `Project` | `id`, `name`, `key` (ví dụ `EVO`, 2–5 ký tự hoa, không đổi được), `icon \| null`, `color` (hex), `ownerId`, `createdAt`, `updatedAt` |
 | `Label` | `id`, `name`, `color` (hex) |
 | `Issue` | `id`, `identifier` (`EVO-12`), `title`, `description \| null`, `status`, `priority`, `rank` (lexorank), `projectId`, `assigneeId \| null`, `labels: Label[]`, `createdAt`, `updatedAt` |
 

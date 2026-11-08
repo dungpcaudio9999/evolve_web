@@ -32,3 +32,11 @@ test('registerSchema chuẩn hóa email, yêu cầu mật khẩu ≥ 8 ký tự'
     !shared.registerSchema.safeParse({ name: 'An', email: 'a@b.com', password: '123' }).success,
   );
 });
+
+test('createProjectSchema chuẩn hóa key viết hoa, updateProjectSchema không nhận key', () => {
+  const r = shared.createProjectSchema.parse({ name: 'Evolve', key: ' evo ' });
+  assert.strictEqual(r.key, 'EVO');
+  assert.ok(!shared.createProjectSchema.safeParse({ name: 'X', key: '1AB' }).success);
+  assert.ok(!shared.createProjectSchema.safeParse({ name: 'X', key: 'TOOLONG' }).success);
+  assert.ok(!('key' in shared.updateProjectSchema.parse({ key: 'NEW', name: 'Y' })));
+});
