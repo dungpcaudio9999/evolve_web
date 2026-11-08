@@ -21,8 +21,8 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | `src/main.ts` | Khởi động app: CORS, cổng (Swagger thêm ở W3-B3) | – |
 | `src/app.module.ts` | Module gốc: `ConfigModule` (đọc `.env`), import các module | – |
 | `src/modules/` | Các module nghiệp vụ | [src/modules/README.md](src/modules/README.md) |
-| `src/prisma/` | `PrismaService`, `PrismaModule` (W2-B3) | – |
-| `src/common/` | Exception filter, guard, decorator (`@CurrentUser`) dùng chung (W2-B3) | – |
+| `src/prisma/` | `PrismaService` (kết nối lười, `isHealthy()`), `PrismaModule` (global) | – |
+| `src/common/` | `filters/all-exceptions.filter.ts`: mọi lỗi trả về dạng `{ statusCode, message, errors?, path, timestamp }`, lỗi Prisma P2002/P2025/P2003 → 409/404/400. Guard, decorator thêm ở W3 | – |
 | `prisma/` | Schema, migration, seed | [prisma/README.md](prisma/README.md) |
 | `test/` | Test e2e của API (Jest + Supertest) | – |
 
@@ -54,7 +54,7 @@ Xem đầy đủ tại Swagger `/docs` (từ W3-B3) hoặc [docs/api/](../../doc
 
 | Method | Path | Mô tả | Cần JWT | Trạng thái |
 |---|---|---|---|---|
-| GET | `/health` | Kiểm tra API còn sống → `{ status: 'ok', timestamp }` | Không | ✅ W1-B2 |
+| GET | `/health` | Kiểm tra API và DB → `{ status: 'ok', db: 'up' \| 'down', timestamp }` | Không | ✅ W1-B2, W2-B3 |
 | POST | `/auth/register`, `/auth/login` | Đăng ký, đăng nhập | Không | W3-B1 |
 | GET | `/auth/me` | Người dùng hiện tại | Có | W3-B1 |
 | GET/POST/PATCH/DELETE | `/projects…` | CRUD project | Có | W3-B2 |
