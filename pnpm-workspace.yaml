@@ -1,3 +1,9 @@
 packages:
   - apps/*
   - packages/*
+
+# pnpm 10 chặn script cài đặt của thư viện; Prisma cần chạy để tải engine.
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - prisma
