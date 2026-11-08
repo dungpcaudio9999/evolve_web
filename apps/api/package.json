@@ -20,16 +20,22 @@
     "dev": "nest start --watch",
     "lint:fix": "eslint \"{src,test}/**/*.ts\" --fix",
     "typecheck": "tsc --noEmit",
-    "test:unit": "jest"
+    "test:unit": "jest",
+    "postinstall": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "db:reset": "prisma migrate reset",
+    "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@evolve/shared": "workspace:*",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@prisma/client": "^6.19.3",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1",
-    "@evolve/shared": "workspace:*",
-    "@nestjs/config": "^4.0.2"
+    "rxjs": "^7.8.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
@@ -47,6 +53,7 @@
     "globals": "^17.0.0",
     "jest": "^30.0.0",
     "prettier": "^3.4.2",
+    "prisma": "^6.19.3",
     "source-map-support": "^0.5.21",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",

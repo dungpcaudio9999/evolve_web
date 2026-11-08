@@ -23,7 +23,7 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | `src/modules/` | Các module nghiệp vụ | [src/modules/README.md](src/modules/README.md) |
 | `src/prisma/` | `PrismaService`, `PrismaModule` (W2-B3) | – |
 | `src/common/` | Exception filter, guard, decorator (`@CurrentUser`) dùng chung (W2-B3) | – |
-| `prisma/` | Schema, migration, seed (W2-B1) | `prisma/README.md` (khung: `docs/readme-templates/api-prisma.md`) |
+| `prisma/` | Schema, migration, seed | [prisma/README.md](prisma/README.md) |
 | `test/` | Test e2e của API (Jest + Supertest) | – |
 
 ## Biến môi trường
