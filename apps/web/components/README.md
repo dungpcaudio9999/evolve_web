@@ -1,6 +1,6 @@
 # apps/web/components: Component giao diện
 
-> Copy vào `apps/web/components/README.md` · Người điền: **C**
+> Người phụ trách: **C**
 
 ## Mục đích
 Chứa toàn bộ **component React**, chia theo vai trò. Component chỉ lo hiển thị và nhận sự kiện; dữ liệu lấy từ store.
@@ -8,9 +8,11 @@ Chứa toàn bộ **component React**, chia theo vai trò. Component chỉ lo hi
 ## Cấu trúc và file dự kiến
 
 ### `ui/`: component cơ bản (shadcn/ui) · C · W1-C2
-Sinh bằng `pnpm dlx shadcn add <tên>`. **Hạn chế sửa trực tiếp**; nếu sửa thì ghi chú lại ở đây.
+Cấu hình trong `apps/web/components.json`: style `radix-nova` (Radix UI), màu nền `neutral`, icon `lucide`. Thêm component mới: `cd apps/web && pnpm dlx shadcn@latest add <tên>`. **Hạn chế sửa trực tiếp**; nếu sửa thì ghi chú lại ở đây.
 `button` · `input` · `textarea` · `dialog` · `dropdown-menu` · `popover` · `context-menu` · `command` · `avatar` · `badge` · `tooltip` · `separator`
-<!-- TODO(C): ghi lại component đã sửa so với bản gốc -->
+Ngoài ra có `input-group` (do `command` cần). Xem thử tất cả tại trang `/dev/ui`.
+
+Component đã sửa so với bản gốc: _chưa có_.
 
 ### `layout/`: khung trang · A
 | File | Vai trò | Task |
@@ -55,4 +57,5 @@ Sinh bằng `pnpm dlx shadcn add <tên>`. **Hạn chế sửa trực tiếp**; n
 - Tên file `kebab-case.tsx`, tên component `PascalCase`.
 - Component **không gọi API trực tiếp**; dùng hàm của store.
 - Màu sắc dùng biến theme (`bg-primary`, `text-muted-foreground`…), không ghi mã màu cứng.
-<!-- TODO(C): bổ sung -->
+- `TooltipProvider` đã bọc toàn app trong `app/layout.tsx`; dùng `Tooltip` ở đâu cũng được.
+- Component có state hoặc sự kiện thì thêm `'use client'` ở đầu file.
