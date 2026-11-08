@@ -24,10 +24,10 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 | `(auth)/layout.tsx` | – | Layout cho trang đăng nhập/đăng ký | A · W3-A1 |
 | `(auth)/login/page.tsx` | `/login` | Đăng nhập | A · W3-A1 |
 | `(auth)/register/page.tsx` | `/register` | Đăng ký | A · W3-A1 |
-| `(main)/layout.tsx` | – | Sidebar + header + route guard | A · W2-A4, W3-A2 |
+| `(main)/layout.tsx` ✅ | – | Sidebar bên trái + vùng nội dung; mỗi trang tự render `<Header>`. Route guard thêm ở W3-A2 | A · W2-A4, W3-A2 |
 | `(main)/issues/page.tsx` | `/issues` | List/board issue, filter bar | C · W2-C3, W5-C1 |
 | `(main)/issues/[id]/page.tsx` | `/issues/:id` | Chi tiết issue | C · W4-C3 |
-| `(main)/projects/page.tsx` | `/projects` | Danh sách project | A · W4-A2 |
+| `(main)/projects/page.tsx` | `/projects` | Hiện là khung tạm (W2-A4); danh sách project ở W4 | A · W4-A2 |
 | `(main)/projects/[id]/page.tsx` | `/projects/:id` | Issue của một project | A · W4-A2 |
 
 ## Quy ước

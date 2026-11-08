@@ -17,8 +17,11 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `layout/`: khung trang · A
 | File | Vai trò | Task |
 |---|---|---|
-| `sidebar.tsx` | Logo, link Issues/Projects, menu người dùng | W2-A4 |
-| `header.tsx` | Tiêu đề trang, nút hành động | W2-A4 |
+| `sidebar.tsx` ✅ | Logo, link Issues/Projects (màn hình ≥ md); menu người dùng thêm ở W3 | W2-A4 |
+| `header.tsx` ✅ | `<Header title actions />`: tiêu đề trang (tiếng Anh), nút hành động, thanh mobile | W2-A4 |
+| `mobile-nav.tsx` ✅ | Thanh icon điều hướng cho màn hình < md | W2-A4 |
+| `nav-items.ts` ✅ | Danh sách mục điều hướng (`NAV_ITEMS`), hàm `isActive` | W2-A4 |
+| `logo.tsx` ✅ | Chữ "Evolve" (Panchang + gradient) | W2-A4 |
 | `user-menu.tsx` | Avatar, đăng xuất | W3-A2 |
 
 ### `common/`: component nhỏ dùng nhiều nơi · C
