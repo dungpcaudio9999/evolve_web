@@ -1,6 +1,6 @@
 # apps/web/store: Quản lý state (Zustand)
 
-> Copy vào `apps/web/store/README.md` · Người điền: **C**
+> Người phụ trách: **C**
 
 ## Mục đích
 Giữ **dữ liệu và trạng thái** của ứng dụng. Store là **nơi duy nhất gọi API** (qua `lib/api-client`); component chỉ đọc state và gọi hàm của store.
@@ -8,7 +8,7 @@ Giữ **dữ liệu và trạng thái** của ứng dụng. Store là **nơi duy
 ## File dự kiến
 | File | Quản lý | Hàm chính (dự kiến) | Người làm · Task |
 |---|---|---|---|
-| `issues-store.ts` | Danh sách issue | `fetchIssues`, `addIssue`, `updateIssue`, `deleteIssue`, `moveIssue`, `getIssueById` | C · W2-C1, W4-C1 |
+| `issues-store.ts` ✅ | Danh sách issue + dữ liệu tham chiếu (users, labels, projects). Hiện dùng dữ liệu mẫu | `addIssue`, `updateIssue`, `deleteIssue`, `setStatus`, `moveIssue`; helper `groupByStatus`. W4-C1 thêm `fetchIssues` | C · W2-C1, W4-C1 |
 | `projects-store.ts` | Danh sách project | `fetchProjects`, `addProject`, `updateProject`, `deleteProject` | A · W4-A1 |
 | `auth-store.ts` | Người dùng, token | `login`, `register`, `logout`, `fetchMe` | A · W3-A2 |
 | `filter-store.ts` | Bộ lọc đang chọn (nếu không lưu hết lên URL) | `setFilter`, `clearFilters` | A · W5-A3 |
@@ -16,11 +16,21 @@ Giữ **dữ liệu và trạng thái** của ứng dụng. Store là **nơi duy
 
 ## Mẫu store
 ```ts
-// TODO(C): dán mẫu store chuẩn sau khi viết xong issues-store
+// Đọc trong component (chỉ chọn phần cần để tránh render lại thừa):
+const issues = useIssuesStore((s) => s.issues);
+const setStatus = useIssuesStore((s) => s.setStatus);
+const groups = useMemo(() => groupByStatus(issues), [issues]);
+
+// Gọi hàm:
+setStatus(issue.id, 'DONE');
+useIssuesStore.getState().addIssue({ title: 'Việc mới', projectId: 'p-evo' });
 ```
 
 ## Quy ước
 - Một store cho một miền dữ liệu.
 - Hàm sửa dữ liệu phải: cập nhật state → gọi API → nếu lỗi thì hoàn tác và hiện toast.
 - Mỗi store có `isLoading` và `error` nếu có gọi API.
-<!-- TODO(C): bổ sung -->
+- Input được validate bằng zod schema của `@evolve/shared` (giống API) → sai thì ném `ZodError`.
+- Thứ tự trong cột dùng `rank` (lexorank, `lib/rank.ts`), cùng thuật toán với API.
+- Khi đổi sang API (W4-C1): **giữ nguyên tên và tham số các hàm** để component không phải sửa.
+- Test: `store/*.test.ts` (Vitest), chạy `pnpm --filter web test`.
