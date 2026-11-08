@@ -23,7 +23,7 @@ Request → JwtAuthGuard → Controller (validate DTO) → Service → PrismaSer
 ## Danh sách module
 | Module | Endpoint | Vai trò | Task |
 |---|---|---|---|
-| `health/` ✅ | `GET /health` | Kiểm tra API còn sống | W1-B2 |
+| `health/` ✅ | `GET /health` | Kiểm tra API còn sống và DB (`db: up/down`) | W1-B2, W2-B3 |
 | `auth/` | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | Đăng ký, đăng nhập, JWT strategy và guard | W3-B1 |
 | `users/` | `GET /users` | Danh sách người dùng (để chọn assignee) | W4-B2 |
 | `projects/` | `GET/POST /projects`, `GET/PATCH/DELETE /projects/:id` | CRUD project của người dùng hiện tại | W3-B2 |
@@ -31,7 +31,8 @@ Request → JwtAuthGuard → Controller (validate DTO) → Service → PrismaSer
 | `labels/` | `GET /labels` | Danh sách nhãn | W4-B2 |
 
 ## Quy ước
-- Controller mỏng, logic đặt trong service.
+- Controller mỏng, logic đặt trong service. Service inject `PrismaService` (đã global, không cần import `PrismaModule`).
+- Không tự bắt lỗi để trả JSON: ném `HttpException` (`NotFoundException`…), `AllExceptionsFilter` lo phần định dạng.
 - Mọi route (trừ `auth/register`, `auth/login`, `health`) đều cần JWT.
 - Chỉ trả về dữ liệu thuộc về người dùng hiện tại.
 - Module mới đăng ký trong `src/app.module.ts` (mảng `imports`).

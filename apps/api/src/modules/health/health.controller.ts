@@ -1,15 +1,21 @@
 import { Controller, Get } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
 
 export interface HealthResponse {
   status: 'ok';
+  /** Trạng thái kết nối PostgreSQL. API vẫn trả 200 khi DB "down" để biết app còn sống. */
+  db: 'up' | 'down';
   timestamp: string;
 }
 
 @Controller('health')
 export class HealthController {
-  /** Dùng để kiểm tra API còn sống (và đánh thức Render trước khi demo). */
+  constructor(private readonly prisma: PrismaService) {}
+
+  /** Kiểm tra API và DB (cũng dùng để đánh thức Render trước khi demo). */
   @Get()
-  check(): HealthResponse {
-    return { status: 'ok', timestamp: new Date().toISOString() };
+  async check(): Promise<HealthResponse> {
+    const dbUp = await this.prisma.isHealthy();
+    return { status: 'ok', db: dbUp ? 'up' : 'down', timestamp: new Date().toISOString() };
   }
 }
