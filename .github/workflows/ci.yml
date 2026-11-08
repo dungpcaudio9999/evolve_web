@@ -1,0 +1,67 @@
+# CI: chạy cho mọi PR và khi có commit mới trên dev/main.
+# Tên job "verify" được dùng làm status check bắt buộc trong branch protection.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [dev, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: evolve
+          POSTGRES_PASSWORD: evolve
+          POSTGRES_DB: evolve
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U evolve -d evolve"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://evolve:evolve@localhost:5432/evolve?schema=public
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4 # đọc phiên bản từ "packageManager" trong package.json
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Format
+        run: pnpm format:check
+
+      - name: Build
+        run: pnpm build
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        run: pnpm lint
+
+      - name: Test
+        run: pnpm test
+
+      - name: Migrations apply cleanly
+        run: pnpm --filter api db:deploy
