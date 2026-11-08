@@ -58,11 +58,32 @@ export default function DevUiPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-8 p-8">
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold">UI components</h1>
+        <h1 className="text-gradient text-2xl font-semibold">UI components</h1>
         <p className="text-sm text-muted-foreground">
           12 component shadcn/ui dùng trong Evolve Web.
         </p>
       </header>
+
+      <Section title="theme taalas">
+        {[
+          ['bg-background', 'background'],
+          ['bg-card', 'card'],
+          ['bg-primary', 'primary'],
+          ['bg-secondary', 'secondary'],
+          ['bg-accent', 'accent'],
+          ['bg-brand-ice', 'ice'],
+          ['bg-brand-cream', 'cream'],
+          ['bg-brand-teal', 'teal'],
+        ].map(([cls, name]) => (
+          <span
+            key={name}
+            className="flex flex-col items-center gap-1 text-xs text-muted-foreground"
+          >
+            <span className={`size-10 rounded-md border ${cls}`} />
+            {name}
+          </span>
+        ))}
+      </Section>
 
       <h2 className="text-lg font-semibold">components/common</h2>
 

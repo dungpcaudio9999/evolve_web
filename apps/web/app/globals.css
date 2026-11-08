@@ -39,6 +39,10 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-brand-copper: var(--brand-copper);
+  --color-brand-ice: var(--brand-ice);
+  --color-brand-cream: var(--brand-cream);
+  --color-brand-teal: var(--brand-teal);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -48,73 +52,61 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-}
-
+/*
+ * Design system theo taalas.com (W2-A2). Giao diện chỉ có nền tối.
+ * Bảng màu gốc: nền #101522, nhấn #E8B07C (đồng), phụ #D5EFF4 (băng), #F2E3BC (kem), #3E6C76 (teal).
+ * shadcn đọc các biến dưới đây; component dùng class như bg-primary, text-muted-foreground.
+ */
+:root,
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  /* Bảng màu thương hiệu */
+  --brand-navy: #101522;
+  --brand-copper: #e8b07c;
+  --brand-ice: #d5eff4;
+  --brand-cream: #f2e3bc;
+  --brand-teal: #3e6c76;
+  --brand-gradient: linear-gradient(
+    92deg,
+    #d5eff4 0.94%,
+    #f2e3bc 28.17%,
+    #e8b07c 60.75%,
+    #3e6c76 98.19%
+  );
+
+  --background: #101522;
+  --foreground: #ffffff;
+  --card: #161c2c;
+  --card-foreground: #ffffff;
+  --popover: #181f30;
+  --popover-foreground: #ffffff;
+  --primary: #e8b07c;
+  --primary-foreground: #101522;
+  --secondary: #1d2537;
+  --secondary-foreground: #d5eff4;
+  --muted: #1a2132;
+  --muted-foreground: #a3a9b6;
+  --accent: #222b40;
+  --accent-foreground: #f2e3bc;
+  --destructive: #e5484d;
+  --border: rgb(255 255 255 / 8%);
+  --input: rgb(255 255 255 / 12%);
+  --ring: #e8b07c;
+  --chart-1: #e8b07c;
+  --chart-2: #d5eff4;
+  --chart-3: #3e6c76;
+  --chart-4: #f2e3bc;
+  --chart-5: #a3a9b6;
+  --radius: 0.83rem;
+  --sidebar: #0c111c;
+  --sidebar-foreground: #d9dde5;
+  --sidebar-primary: #e8b07c;
+  --sidebar-primary-foreground: #101522;
+  --sidebar-accent: #1a2132;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 6%);
+  --sidebar-ring: #e8b07c;
+
+  color-scheme: dark;
 }
 
 @layer base {
@@ -127,4 +119,12 @@
   html {
     @apply font-sans;
   }
+}
+
+/* Chữ gradient cho tiêu đề trang: <h1 className="text-gradient">… */
+@utility text-gradient {
+  background-image: var(--brand-gradient);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
 }
