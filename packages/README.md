@@ -18,7 +18,7 @@ Chứa **thư viện nội bộ dùng chung** giữa các app trong `apps/`. Pac
 ```ts
 import { Issue, createIssueSchema, STATUSES } from '@evolve/shared';
 ```
-<!-- TODO(A, W1-A4): xác nhận lại cách build/export (dùng source TS trực tiếp hay build ra dist) -->
+Package build ra `dist/` (CommonJS + `.d.ts`) để NestJS chạy trực tiếp và Next.js import được mà không cần `transpilePackages`. `pnpm dev` ở gốc tự build trước và watch khi sửa.
 
 ## Quy ước
 - Chỉ thêm package mới khi code thật sự được **cả hai app** dùng.
