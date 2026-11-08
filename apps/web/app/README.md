@@ -1,6 +1,6 @@
 # apps/web/app: Routing
 
-> Copy vào `apps/web/app/README.md` · Người điền: **A**
+> Người phụ trách: **A**
 
 ## Mục đích
 Định nghĩa **các trang và layout** theo App Router của Next.js: mỗi thư mục là một đoạn URL, `page.tsx` là nội dung trang, `layout.tsx` là phần khung bao quanh.
@@ -18,7 +18,7 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 |---|---|---|---|
 | `layout.tsx` | – | Layout gốc: font, theme, `<Toaster />` | A · W2-A3 |
 | `globals.css` | – | Design system taalas (màu, bo góc, `text-gradient`) | A · W2-A2 |
-| `page.tsx` | `/` | Chuyển hướng sang `/issues` | C · W2-C2 |
+| `page.tsx` | `/` | Hiện tại: trang tạm (W1-C1). Sẽ chuyển hướng sang `/issues` | C · W2-C2 |
 | `not-found.tsx` | – | Trang 404 | A |
 | `(auth)/layout.tsx` | – | Layout cho trang đăng nhập/đăng ký | A · W3-A1 |
 | `(auth)/login/page.tsx` | `/login` | Đăng nhập | A · W3-A1 |
@@ -32,4 +32,4 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 ## Quy ước
 - `page.tsx` chỉ ghép component; logic đặt trong `components/` và `store/`.
 - Component có tương tác (state, sự kiện) thì thêm `'use client'`.
-<!-- TODO(A): bổ sung -->
+- Trang `/dev/*` chỉ dùng để xem thử component trong lúc phát triển (W1-C2, W1-C3).
