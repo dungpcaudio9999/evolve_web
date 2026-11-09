@@ -15,6 +15,7 @@ Tập trung **toàn bộ tài liệu** của dự án: kế hoạch, phân công
 | [EVOLVE_WEB_TEAM_WORKFLOW.md](EVOLVE_WEB_TEAM_WORKFLOW.md) | Bản tiếng Anh |
 | [W1/W1-A_TONG_KET.md](W1/W1-A_TONG_KET.md) | Tổng kết tuần 1 |
 | [W2/README.md](W2/README.md) | Báo cáo tuần 2 |
+| [W3/README.md](W3/README.md) | Báo cáo tuần 3 |
 
 ## Thư mục con
 | Thư mục | Vai trò | Người phụ trách | File dự kiến |
