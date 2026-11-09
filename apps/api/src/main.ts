@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { SWAGGER_PATH, setupSwagger } from './swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,9 +10,11 @@ async function bootstrap() {
     credentials: true,
   });
 
+  setupSwagger(app);
+
   const port = Number(process.env.PORT ?? 4000);
   await app.listen(port);
-  console.log(`API đang chạy tại http://localhost:${port}`);
+  console.log(`API đang chạy tại http://localhost:${port} (Swagger: /${SWAGGER_PATH})`);
 }
 
 void bootstrap();
