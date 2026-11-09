@@ -17,6 +17,7 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 | File | URL | Vai trò | Người làm · Task |
 |---|---|---|---|
 | `layout.tsx` | – | Layout gốc: font, theme, `<TooltipProvider>` (đã có), `<Toaster />` | A · W2-A3 |
+| `icon.svg` ✅ | – | Favicon: chữ "E" gradient taalas trên nền navy (Next.js tự sinh `<link rel="icon">`) | A · W3-A3 |
 | `globals.css` | – | Design system taalas (màu, bo góc, `text-gradient`) | A · W2-A2 |
 | `page.tsx` ✅ | `/` | Chuyển hướng sang `/issues` | C · W2-C3 |
 | `not-found.tsx` | – | Trang 404 | A |

@@ -9,7 +9,7 @@ Chứa **code không phải component và không phải store**: gọi HTTP, hà
 | File | Vai trò | Người làm · Task |
 |---|---|---|
 | `api-client.ts` ✅ | Bọc `fetch`: base URL từ `NEXT_PUBLIC_API_URL`, gắn `Authorization: Bearer <token>`, parse JSON, ném `ApiError`, hiện toast; 401 → xóa token + phát `UNAUTHORIZED_EVENT` | C · W3-C3 |
-| `utils.ts` ✅ | `cn()` gộp className (shadcn sinh ở W1-C2); thêm hàm format ngày khi cần | C · W1-C2 |
+| `utils.ts` ✅ | Re-export `cn()` từ gói `cn` (gộp className, thay cho clsx + tailwind-merge; component shadcn style `radix-nova` import trực tiếp từ gói này nên **không xóa** dependency `cn`) | C · W1-C2 |
 | `sample-data.ts` ✅ | Dữ liệu mẫu (khớp seed của API, project EVO). Xóa sau W4-C1 | C · W2-C1 |
 | `format.ts` ✅ | `formatShortDate` ("2 thg 11", cố định múi giờ Việt Nam để tránh lỗi hydration) | C · W2-C2 |
 | `rank.ts` ✅ | `rankBetween(before, after)` (lexorank), `compareRank` | C · W2-C1 |
