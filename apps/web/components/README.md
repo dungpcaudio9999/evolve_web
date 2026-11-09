@@ -10,9 +10,14 @@ Chứa toàn bộ **component React**, chia theo vai trò. Component chỉ lo hi
 ### `ui/`: component cơ bản (shadcn/ui) · C · W1-C2
 Cấu hình trong `apps/web/components.json`: style `radix-nova` (Radix UI), màu nền `neutral`, icon `lucide`. Thêm component mới: `cd apps/web && pnpm dlx shadcn@latest add <tên>`. **Hạn chế sửa trực tiếp**; nếu sửa thì ghi chú lại ở đây.
 `button` · `input` · `textarea` · `dialog` · `dropdown-menu` · `popover` · `context-menu` · `command` · `avatar` · `badge` · `tooltip` · `separator`
-Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
+Thêm ở W3-A1: `label`, `card`. Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
 
 Component đã sửa so với bản gốc: _chưa có_.
+
+### `auth/`: đăng nhập, đăng ký · A
+| File | Vai trò | Task |
+|---|---|---|
+| `form-field.tsx` ✅ | Nhãn + ô nhập + dòng lỗi (liên kết `aria-describedby`) | W3-A1 |
 
 ### `layout/`: khung trang · A
 | File | Vai trò | Task |
@@ -63,3 +68,4 @@ Component đã sửa so với bản gốc: _chưa có_.
 - Màu sắc dùng biến theme (`bg-primary`, `text-muted-foreground`…), không ghi mã màu cứng.
 - `TooltipProvider` đã bọc toàn app trong `app/layout.tsx`; dùng `Tooltip` ở đâu cũng được.
 - Component có state hoặc sự kiện thì thêm `'use client'` ở đầu file.
+- Tiêu đề **tiếng Việt** thêm `font-sans` (vd. `<CardTitle className="font-sans">`): `CardTitle` mặc định dùng `font-heading` (Panchang) không có chữ Việt có dấu.

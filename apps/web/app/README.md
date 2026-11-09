@@ -21,9 +21,9 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 | `page.tsx` ✅ | `/` | Chuyển hướng sang `/issues` | C · W2-C3 |
 | `not-found.tsx` | – | Trang 404 | A |
 | `dev/ui/page.tsx` ✅ | `/dev/ui` | Xem thử component UI và common | C · W1-C2, W1-C3 |
-| `(auth)/layout.tsx` | – | Layout cho trang đăng nhập/đăng ký | A · W3-A1 |
-| `(auth)/login/page.tsx` | `/login` | Đăng nhập | A · W3-A1 |
-| `(auth)/register/page.tsx` | `/register` | Đăng ký | A · W3-A1 |
+| `(auth)/layout.tsx` ✅ | – | Căn giữa, logo, không có sidebar | A · W3-A1 |
+| `(auth)/login/page.tsx` ✅ | `/login` | Form đăng nhập (react-hook-form + `loginSchema`); gọi API ở W3-A2 | A · W3-A1 |
+| `(auth)/register/page.tsx` ✅ | `/register` | Form đăng ký (`registerSchema`); gọi API ở W3-A2 | A · W3-A1 |
 | `(main)/layout.tsx` ✅ | – | Sidebar bên trái + vùng nội dung; mỗi trang tự render `<Header>`. Route guard thêm ở W3-A2 | A · W2-A4, W3-A2 |
 | `(main)/issues/page.tsx` ✅ | `/issues` | Danh sách issue (W2-C3); board, filter bar thêm ở W5 | C · W2-C3, W5-C1 |
 | `(main)/issues/[id]/page.tsx` | `/issues/:id` | Chi tiết issue | C · W4-C3 |
