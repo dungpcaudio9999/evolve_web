@@ -8,17 +8,32 @@ Chứa **code không phải component và không phải store**: gọi HTTP, hà
 ## File dự kiến
 | File | Vai trò | Người làm · Task |
 |---|---|---|
-| `api-client.ts` | Bọc `fetch`: base URL từ `NEXT_PUBLIC_API_URL`, gắn header `Authorization: Bearer <token>`, parse JSON, ném lỗi chuẩn, hiện toast | C · W3-C3 |
+| `api-client.ts` ✅ | Bọc `fetch`: base URL từ `NEXT_PUBLIC_API_URL`, gắn `Authorization: Bearer <token>`, parse JSON, ném `ApiError`, hiện toast; 401 → xóa token + phát `UNAUTHORIZED_EVENT` | C · W3-C3 |
 | `utils.ts` ✅ | `cn()` gộp className (shadcn sinh ở W1-C2); thêm hàm format ngày khi cần | C · W1-C2 |
 | `sample-data.ts` ✅ | Dữ liệu mẫu (khớp seed của API, project EVO). Xóa sau W4-C1 | C · W2-C1 |
 | `format.ts` ✅ | `formatShortDate` ("2 thg 11", cố định múi giờ Việt Nam để tránh lỗi hydration) | C · W2-C2 |
 | `rank.ts` ✅ | `rankBetween(before, after)` (lexorank), `compareRank` | C · W2-C1 |
-| `token.ts` | Đọc/ghi/xóa token | A · W3-A2 |
+| `token.ts` ✅ | `getToken` / `setToken` / `clearToken` (localStorage, an toàn khi chạy trên server) | C · W3-C3 |
 
 ## Cách dùng `api-client`
 ```ts
-// TODO(C, W3-C3): ví dụ api.get('/issues'), api.post('/issues', body)
+import { api, ApiError } from '@/lib/api-client';
+import type { AuthResponse, Issue } from '@evolve/shared';
+
+const issues = await api.get<Issue[]>('/issues', { query: { projectId, status: 'TODO' } });
+const created = await api.post<Issue>('/issues', { title: 'Việc mới', projectId });
+await api.delete(`/issues/${id}`);
+
+// Form tự hiển thị lỗi theo từng trường → tắt toast:
+try {
+  await api.post<AuthResponse>('/auth/login', values, { toastOnError: false });
+} catch (e) {
+  if (e instanceof ApiError && e.status === 401) setError('password', { message: e.message });
+}
 ```
+
+## Lỗi từ API
+`ApiError` có `status` (0 = không kết nối được), `message` (từ API, tiếng Việt), `errors` (lỗi theo từng trường khi 400). Mặc định mọi lỗi đều hiện toast; truyền `toastOnError: false` nếu tự xử lý.
 
 ## Quy ước
 - Hàm trong `lib/` không dùng React hook.

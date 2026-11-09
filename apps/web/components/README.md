@@ -10,7 +10,7 @@ Chứa toàn bộ **component React**, chia theo vai trò. Component chỉ lo hi
 ### `ui/`: component cơ bản (shadcn/ui) · C · W1-C2
 Cấu hình trong `apps/web/components.json`: style `radix-nova` (Radix UI), màu nền `neutral`, icon `lucide`. Thêm component mới: `cd apps/web && pnpm dlx shadcn@latest add <tên>`. **Hạn chế sửa trực tiếp**; nếu sửa thì ghi chú lại ở đây.
 `button` · `input` · `textarea` · `dialog` · `dropdown-menu` · `popover` · `context-menu` · `command` · `avatar` · `badge` · `tooltip` · `separator`
-Ngoài ra có `input-group` (do `command` cần). Xem thử tất cả tại trang `/dev/ui`.
+Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
 
 Component đã sửa so với bản gốc: _chưa có_.
 
