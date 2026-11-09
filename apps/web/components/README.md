@@ -48,7 +48,9 @@ Component đã sửa so với bản gốc: _chưa có_.
 | `assignee-selector.tsx` ✅ | Chọn người được giao, có lựa chọn "Chưa giao" (`null`) | W3-C1 |
 | `label-badge.tsx` ✅ | Nhãn dạng viên thuốc có chấm màu | W2-C2 |
 | `label-selector.tsx` | Chọn nhãn | W4-C2 |
-| `create-issue-modal.tsx` | Modal tạo/sửa issue | W3-C2 |
+| `create-issue-modal.tsx` ✅ | Modal tạo issue (gắn trong layout `(main)`), phím C, Ctrl+Enter để gửi | W3-C2 |
+| `new-issue-button.tsx` ✅ | Nút "New issue" trong Header | W3-C2 |
+| `project-selector.tsx` ✅ | Chọn project trong modal | W3-C2 |
 | `issue-context-menu.tsx` | Menu chuột phải | W4-C2 |
 | `issue-detail.tsx` | Nội dung trang chi tiết | W4-C3 |
 | `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` | Board kéo thả | W5-C1 |
