@@ -1,5 +1,7 @@
 import { ArgumentsHost, BadRequestException, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
+import { createIssueSchema } from '@evolve/shared';
+import { ZodValidationException } from 'nestjs-zod';
 import { AllExceptionsFilter, type ApiErrorBody } from './all-exceptions.filter';
 
 function run(exception: unknown) {
@@ -25,6 +27,16 @@ describe('AllExceptionsFilter', () => {
       new BadRequestException({ message: 'Sai dữ liệu', errors: { title: ['Bắt buộc'] } }),
     );
     expect(body.errors).toEqual({ title: ['Bắt buộc'] });
+  });
+
+  it('lỗi validate zod trả 400 kèm lỗi theo từng trường', () => {
+    const parsed = createIssueSchema.safeParse({ title: ' ', projectId: '' });
+    if (parsed.success) throw new Error('schema phải báo lỗi');
+    const { status, body } = run(new ZodValidationException(parsed.error));
+    expect(status).toBe(400);
+    expect(body.message).toBe('Dữ liệu không hợp lệ');
+    expect(body.errors?.title).toEqual(['Vui lòng nhập tiêu đề']);
+    expect(body.errors?.projectId?.length).toBeGreaterThan(0);
   });
 
   it('chuyển lỗi Prisma P2002 thành 409', () => {

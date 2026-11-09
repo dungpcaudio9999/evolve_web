@@ -12,14 +12,15 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | Database | PostgreSQL, Prisma ORM |
 | Xác thực | Passport + JWT, bcrypt |
 | Validate | zod (`nestjs-zod`) + `@evolve/shared` |
-| Tài liệu API | Swagger tại `/docs` |
+| Tài liệu API | Swagger tại `/docs` (JSON: `/docs-json`) |
 | Test | Jest + Supertest |
 
 ## Cấu trúc
 | Thư mục / File | Vai trò | README |
 |---|---|---|
-| `src/main.ts` | Khởi động app: CORS, cổng (Swagger thêm ở W3-B3) | – |
-| `src/app.module.ts` | Module gốc: `ConfigModule` (đọc `.env`), import các module | – |
+| `src/main.ts` | Khởi động app: CORS, Swagger, cổng | – |
+| `src/swagger.ts` | `setupSwagger(app)`: cấu hình `/docs`, nút Authorize (Bearer JWT) | – |
+| `src/app.module.ts` | Module gốc: `ConfigModule` (đọc `.env`), `ZodValidationPipe` global, `AllExceptionsFilter` global, import các module | – |
 | `src/modules/` | Các module nghiệp vụ | [src/modules/README.md](src/modules/README.md) |
 | `src/prisma/` | `PrismaService` (kết nối lười, `isHealthy()`), `PrismaModule` (global) | – |
 | `src/common/` | `filters/all-exceptions.filter.ts`: mọi lỗi trả về dạng `{ statusCode, message, errors?, path, timestamp }`, lỗi Prisma P2002/P2025/P2003 → 409/404/400. Guard, decorator thêm ở W3 | – |
@@ -49,8 +50,15 @@ pnpm --filter api typecheck
 pnpm --filter api test         # unit test + e2e test
 ```
 
+## Validation
+- DTO tạo từ zod schema của `@evolve/shared`: `class CreateIssueDto extends createZodDto(createIssueSchema) {}`.
+- `ZodValidationPipe` (global) kiểm tra body/query; sai thì trả 400:
+  `{ "statusCode": 400, "message": "Dữ liệu không hợp lệ", "errors": { "title": ["Vui lòng nhập tiêu đề"] }, … }`
+
+> ⚠️ **Ghim `@nestjs/swagger` ở 11.4.2.** Từ 11.4.3, gói này thêm trường `exports` chặn import sâu, làm `patchNestJsSwagger()` của `nestjs-zod` 4 lỗi "Cannot find module …/schema-object-factory". `nestjs-zod` 5 đã sửa nhưng cần zod 4 (contract đang dùng zod 3). Không nâng cấp khi chưa đổi cả hai.
+
 ## Endpoint
-Xem đầy đủ tại Swagger `/docs` (từ W3-B3) hoặc [docs/api/](../../docs/api/).
+Xem đầy đủ tại Swagger http://localhost:4000/docs hoặc [docs/api/](../../docs/api/).
 
 | Method | Path | Mô tả | Cần JWT | Trạng thái |
 |---|---|---|---|---|

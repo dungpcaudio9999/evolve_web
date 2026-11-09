@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import type { Request, Response } from 'express';
+import { ZodValidationException } from 'nestjs-zod';
 
 /** Dạng lỗi thống nhất mà API trả về. */
 export interface ApiErrorBody {
@@ -26,6 +27,16 @@ const PRISMA_STATUS: Record<string, { status: number; message: string }> = {
   P2003: { status: HttpStatus.BAD_REQUEST, message: 'Dữ liệu liên kết không hợp lệ' },
 };
 
+/** `{ "title": ["Bắt buộc"], "labelIds.0": ["…"] }`; lỗi không gắn trường nào nằm ở key "_". */
+function zodFieldErrors(exception: ZodValidationException): Record<string, string[]> {
+  const errors: Record<string, string[]> = {};
+  for (const issue of exception.getZodError().issues) {
+    const key = issue.path.length ? issue.path.join('.') : '_';
+    (errors[key] ??= []).push(issue.message);
+  }
+  return errors;
+}
+
 /** Bắt mọi lỗi và trả về dạng ApiErrorBody; lỗi không lường trước trả 500 và ghi log. */
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
@@ -40,7 +51,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
     let message = 'Lỗi máy chủ';
     let errors: Record<string, string[]> | undefined;
 
-    if (exception instanceof HttpException) {
+    if (exception instanceof ZodValidationException) {
+      // Lỗi validate DTO: gom lỗi theo từng trường để web hiển thị cạnh ô nhập.
+      statusCode = HttpStatus.BAD_REQUEST;
+      message = 'Dữ liệu không hợp lệ';
+      errors = zodFieldErrors(exception);
+    } else if (exception instanceof HttpException) {
       statusCode = exception.getStatus();
       const body = exception.getResponse();
       if (typeof body === 'string') {
