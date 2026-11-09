@@ -38,6 +38,7 @@ pnpm --filter web build
 pnpm --filter web start      # chạy bản build
 pnpm --filter web lint
 pnpm --filter web typecheck  # sinh type cho route (next typegen) rồi chạy tsc
+pnpm --filter web test       # Vitest: logic (Node) + component (jsdom, Testing Library)
 ```
 
 ## Luồng dữ liệu

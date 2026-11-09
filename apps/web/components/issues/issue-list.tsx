@@ -20,6 +20,7 @@ interface IssueListProps {
 export function IssueList({ projectId }: IssueListProps) {
   const allIssues = useIssuesStore((s) => s.issues);
   const users = useIssuesStore((s) => s.users);
+  const updateIssue = useIssuesStore((s) => s.updateIssue);
   const [collapsed, setCollapsed] = useState<Set<Status>>(() => new Set());
 
   const issues = useMemo(
@@ -74,6 +75,8 @@ export function IssueList({ projectId }: IssueListProps) {
                     key={issue.id}
                     issue={issue}
                     assignee={(issue.assigneeId && userById.get(issue.assigneeId)) || null}
+                    users={users}
+                    onChange={(patch) => updateIssue(issue.id, patch)}
                   />
                 ))}
               </div>

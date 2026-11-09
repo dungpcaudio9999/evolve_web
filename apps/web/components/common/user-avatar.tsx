@@ -10,6 +10,8 @@ interface UserAvatarProps {
   /** Kích thước (px). Mặc định 24. */
   size?: number;
   className?: string;
+  /** Avatar chỉ để trang trí (tên đã hiện bên cạnh): ẩn khỏi trình đọc màn hình. */
+  decorative?: boolean;
 }
 
 /** "Nguyễn Văn An" → "NA"; "an" → "A". */
@@ -22,15 +24,16 @@ export function getInitials(name: string): string {
 }
 
 /** Avatar người dùng; không có ảnh thì hiện chữ cái đầu, chưa giao thì hiện vòng nét đứt. */
-export function UserAvatar({ user, size = 24, className }: UserAvatarProps) {
+export function UserAvatar({ user, size = 24, className, decorative }: UserAvatarProps) {
   const style = { width: size, height: size, fontSize: Math.round(size * 0.42) };
 
   if (!user) {
     return (
       <span
-        role="img"
-        aria-label="Chưa giao"
-        title="Chưa giao"
+        role={decorative ? undefined : 'img'}
+        aria-label={decorative ? undefined : 'Chưa giao'}
+        aria-hidden={decorative || undefined}
+        title={decorative ? undefined : 'Chưa giao'}
         className={cn(
           'inline-block shrink-0 rounded-full border border-dashed border-muted-foreground/60',
           className,
@@ -41,7 +44,12 @@ export function UserAvatar({ user, size = 24, className }: UserAvatarProps) {
   }
 
   return (
-    <Avatar className={cn('shrink-0', className)} style={style} title={user.name}>
+    <Avatar
+      className={cn('shrink-0', className)}
+      style={style}
+      title={decorative ? undefined : user.name}
+      aria-hidden={decorative || undefined}
+    >
       {user.avatarUrl && <AvatarImage src={user.avatarUrl} alt={user.name} />}
       <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
     </Avatar>

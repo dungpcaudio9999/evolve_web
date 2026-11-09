@@ -40,11 +40,12 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `issues/`: tính năng issue · C (riêng `filter-bar` do A làm)
 | File | Vai trò | Task |
 |---|---|---|
-| `issue-line.tsx` ✅ | Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
+| `issue-line.tsx` ✅ | Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
 | `issue-list.tsx` ✅ | List nhóm theo trạng thái (ẩn nhóm rỗng), header có số lượng, bấm để thu gọn; prop `projectId` để lọc theo project | W2-C3 |
-| `status-selector.tsx` | Chọn trạng thái | W3-C1 |
-| `priority-selector.tsx` | Chọn độ ưu tiên | W3-C1 |
-| `assignee-selector.tsx` | Chọn người được giao | W3-C1 |
+| `selector-popover.tsx` ✅ | Popover + Command dùng chung: tìm kiếm, bàn phím, dấu tích lựa chọn hiện tại | W3-C1 |
+| `status-selector.tsx` ✅ | Chọn trạng thái (`showLabel` để hiện kèm tên, dùng trong modal) | W3-C1 |
+| `priority-selector.tsx` ✅ | Chọn độ ưu tiên | W3-C1 |
+| `assignee-selector.tsx` ✅ | Chọn người được giao, có lựa chọn "Chưa giao" (`null`) | W3-C1 |
 | `label-badge.tsx` ✅ | Nhãn dạng viên thuốc có chấm màu | W2-C2 |
 | `label-selector.tsx` | Chọn nhãn | W4-C2 |
 | `create-issue-modal.tsx` | Modal tạo/sửa issue | W3-C2 |
@@ -68,4 +69,6 @@ Component đã sửa so với bản gốc: _chưa có_.
 - Màu sắc dùng biến theme (`bg-primary`, `text-muted-foreground`…), không ghi mã màu cứng.
 - `TooltipProvider` đã bọc toàn app trong `app/layout.tsx`; dùng `Tooltip` ở đâu cũng được.
 - Component có state hoặc sự kiện thì thêm `'use client'` ở đầu file.
+- Icon/avatar nằm cạnh chữ cùng nghĩa thì truyền `decorative` để trình đọc màn hình không đọc lặp.
+- Test component: file `*.test.tsx` có dòng đầu `// @vitest-environment jsdom`, dùng `@testing-library/react` + `user-event` (xem `issues/selectors.test.tsx`).
 - Tiêu đề **tiếng Việt** thêm `font-sans` (vd. `<CardTitle className="font-sans">`): `CardTitle` mặc định dùng `font-heading` (Panchang) không có chữ Việt có dấu.
