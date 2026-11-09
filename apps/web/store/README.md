@@ -12,7 +12,7 @@ Giữ **dữ liệu và trạng thái** của ứng dụng. Store là **nơi duy
 | `projects-store.ts` | Danh sách project | `fetchProjects`, `addProject`, `updateProject`, `deleteProject` | A · W4-A1 |
 | `auth-store.ts` | Người dùng, token | `login`, `register`, `logout`, `fetchMe` | A · W3-A2 |
 | `filter-store.ts` | Bộ lọc đang chọn (nếu không lưu hết lên URL) | `setFilter`, `clearFilters` | A · W5-A3 |
-| `ui-store.ts` | Trạng thái giao diện: modal mở/đóng, sidebar | `openCreateIssue`, `closeCreateIssue` | C · W3-C2 |
+| `ui-store.ts` ✅ | Trạng thái giao diện: modal tạo issue mở/đóng | `openCreateIssue`, `closeCreateIssue`, `setCreateIssueOpen` | C · W3-C2 |
 
 ## Mẫu store
 ```ts

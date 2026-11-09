@@ -20,7 +20,7 @@
 | `app/` | Routing: mỗi thư mục là một trang | [app/README.md](app/README.md) |
 | `components/` | Component giao diện | [components/README.md](components/README.md) |
 | `store/` | Zustand store, nơi duy nhất gọi API | [store/README.md](store/README.md) |
-| `hooks/` | Hook dùng chung (`use-hotkey`, `use-mobile`…) | – |
+| `hooks/` | Hook dùng chung: `use-hotkey` (phím tắt một phím, bỏ qua khi đang gõ) | – |
 | `lib/` | `api-client`, hàm tiện ích | [lib/README.md](lib/README.md) |
 | `public/` | Ảnh, logo, favicon, font Panchang | – |
 
