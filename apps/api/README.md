@@ -25,7 +25,7 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | `src/prisma/` | `PrismaService` (kết nối lười, `isHealthy()`), `PrismaModule` (global) | – |
 | `src/common/` | `filters/all-exceptions.filter.ts`: mọi lỗi trả về dạng `{ statusCode, message, errors?, path, timestamp }`, lỗi Prisma P2002/P2025/P2003 → 409/404/400. Guard, decorator thêm ở W3 | – |
 | `prisma/` | Schema, migration, seed | [prisma/README.md](prisma/README.md) |
-| `test/` | Test e2e của API (Jest + Supertest) | – |
+| `test/` | Test e2e (Jest + Supertest). `auth.e2e-spec.ts` cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
 
 ## Biến môi trường
 | Biến | Ví dụ | Ý nghĩa |
@@ -50,6 +50,13 @@ pnpm --filter api typecheck
 pnpm --filter api test         # unit test + e2e test
 ```
 
+## Xác thực (JWT)
+- `POST /auth/login` trả `accessToken`; gửi kèm header `Authorization: Bearer <accessToken>` cho route cần đăng nhập.
+- Route cần đăng nhập: thêm `@UseGuards(JwtAuthGuard)` (`src/modules/auth/jwt-auth.guard.ts`), lấy user bằng `@CurrentUser() user: AuthUser` (`src/common/decorators/current-user.decorator.ts`).
+- `JWT_SECRET` bắt buộc khi `NODE_ENV=production`; ở máy dev thiếu thì dùng khóa tạm. `JWT_EXPIRES_IN` mặc định `7d`.
+- Mật khẩu băm bằng `bcryptjs` (10 vòng). Sai email hay sai mật khẩu đều trả cùng thông báo "Sai email hoặc mật khẩu".
+- Thử nhanh: tài khoản seed `an@evolve.dev` / `password123`, hoặc nút **Authorize** trên `/docs`.
+
 ## Validation
 - DTO tạo từ zod schema của `@evolve/shared`: `class CreateIssueDto extends createZodDto(createIssueSchema) {}`.
 - `ZodValidationPipe` (global) kiểm tra body/query; sai thì trả 400:
@@ -63,8 +70,8 @@ Xem đầy đủ tại Swagger http://localhost:4000/docs hoặc [docs/api/](../
 | Method | Path | Mô tả | Cần JWT | Trạng thái |
 |---|---|---|---|---|
 | GET | `/health` | Kiểm tra API và DB → `{ status: 'ok', db: 'up' \| 'down', timestamp }` | Không | ✅ W1-B2, W2-B3 |
-| POST | `/auth/register`, `/auth/login` | Đăng ký, đăng nhập | Không | W3-B1 |
-| GET | `/auth/me` | Người dùng hiện tại | Có | W3-B1 |
+| POST | `/auth/register`, `/auth/login` | Đăng ký (201), đăng nhập (200) → `{ accessToken, user }`; email trùng 409, sai mật khẩu 401 | Không | ✅ W3-B1 |
+| GET | `/auth/me` | Người dùng hiện tại | Có | ✅ W3-B1 |
 | GET/POST/PATCH/DELETE | `/projects…` | CRUD project | Có | W3-B2 |
 | GET/POST/PATCH/DELETE | `/issues…`, `PATCH /issues/:id/move` | CRUD issue, kéo thả | Có | W4-B1, W5-B1 |
 | GET | `/users`, `/labels` | Danh sách người dùng, nhãn | Có | W4-B2 |
