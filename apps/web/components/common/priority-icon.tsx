@@ -14,7 +14,7 @@ const FILLED_BARS: Partial<Record<Priority, number>> = { HIGH: 3, MEDIUM: 2, LOW
 /**
  * Icon độ ưu tiên kiểu Linear: No priority = 3 gạch ngang, Urgent = ô vuông có dấu "!",
  * High/Medium/Low = 3 cột với 3/2/1 cột tô đậm. Contract không có màu cho priority
- * nên icon dùng `currentColor` (màu chữ hiện tại); Urgent dùng màu destructive.
+ * nên icon dùng `currentColor` (màu chữ hiện tại); Urgent luôn dùng màu destructive (kể cả khi truyền className màu).
  */
 export function PriorityIcon({ priority, size = 14, className }: PriorityIconProps) {
   const { name } = PRIORITY_BY_ID[priority];
@@ -28,7 +28,7 @@ export function PriorityIcon({ priority, size = 14, className }: PriorityIconPro
       height={size}
       viewBox="0 0 14 14"
       fill="none"
-      className={cn('shrink-0', priority === 'URGENT' && 'text-destructive', className)}
+      className={cn('shrink-0', className, priority === 'URGENT' && 'text-destructive')}
     >
       <title>{name}</title>
       {priority === 'NO_PRIORITY' && (

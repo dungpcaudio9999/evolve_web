@@ -11,6 +11,7 @@ Chứa **code không phải component và không phải store**: gọi HTTP, hà
 | `api-client.ts` | Bọc `fetch`: base URL từ `NEXT_PUBLIC_API_URL`, gắn header `Authorization: Bearer <token>`, parse JSON, ném lỗi chuẩn, hiện toast | C · W3-C3 |
 | `utils.ts` ✅ | `cn()` gộp className (shadcn sinh ở W1-C2); thêm hàm format ngày khi cần | C · W1-C2 |
 | `sample-data.ts` ✅ | Dữ liệu mẫu (khớp seed của API, project EVO). Xóa sau W4-C1 | C · W2-C1 |
+| `format.ts` ✅ | `formatShortDate` ("2 thg 11", cố định múi giờ Việt Nam để tránh lỗi hydration) | C · W2-C2 |
 | `rank.ts` ✅ | `rankBetween(before, after)` (lexorank), `compareRank` | C · W2-C1 |
 | `token.ts` | Đọc/ghi/xóa token | A · W3-A2 |
 
