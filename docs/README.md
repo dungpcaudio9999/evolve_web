@@ -20,13 +20,3 @@ Tập trung **toàn bộ tài liệu** của dự án: kế hoạch, phân công
 | `architecture/` | Kiến trúc hệ thống, quyết định kỹ thuật | A | `overview.md` (sơ đồ web ↔ api ↔ DB), `store-api-map.md` (store nào gọi endpoint nào; C viết ở W2-C3), `frontend.md` (C), `deployment.md` |
 | `api/` | Tài liệu REST API | B | `endpoints.md` (danh sách endpoint, request/response mẫu), `auth.md` (luồng JWT) |
 | `database/` | Thiết kế database | B | `erd.md` hoặc `erd.png` (sơ đồ quan hệ), `models.md` (mô tả bảng và trường) |
-| `readme-templates/` | Khung README cho `apps/web` và `apps/api`, dùng sau khi khởi tạo app | A | Xem bên dưới |
-
-## Khung README chờ dùng
-Sau khi khởi tạo app (W1-C1, W1-B2), người phụ trách copy khung vào đúng vị trí rồi điền nội dung:
-
-| Khung | Copy vào | Người điền |
-|---|---|---|
-| `readme-templates/web-store.md` | `apps/web/store/README.md` | C |
-
-Copy xong thì xóa khung tương ứng trong `readme-templates/`. Khi thư mục này trống thì xóa luôn.
