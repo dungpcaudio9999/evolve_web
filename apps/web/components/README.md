@@ -36,7 +36,7 @@ Component đã sửa so với bản gốc: _chưa có_.
 | File | Vai trò | Task |
 |---|---|---|
 | `issue-line.tsx` ✅ | Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
-| `issue-list.tsx` | List nhóm theo trạng thái | W2-C3 |
+| `issue-list.tsx` ✅ | List nhóm theo trạng thái (ẩn nhóm rỗng), header có số lượng, bấm để thu gọn; prop `projectId` để lọc theo project | W2-C3 |
 | `status-selector.tsx` | Chọn trạng thái | W3-C1 |
 | `priority-selector.tsx` | Chọn độ ưu tiên | W3-C1 |
 | `assignee-selector.tsx` | Chọn người được giao | W3-C1 |
