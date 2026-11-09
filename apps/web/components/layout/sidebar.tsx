@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { Logo } from './logo';
 import { NAV_ITEMS, isActive } from './nav-items';
+import { UserMenu } from './user-menu';
 
 /** Sidebar cố định bên trái (màn hình ≥ md). Trên mobile dùng MobileNav trong Header. */
 export function Sidebar() {
@@ -36,6 +37,9 @@ export function Sidebar() {
           );
         })}
       </nav>
+      <div className="mt-auto border-t border-sidebar-border p-3">
+        <UserMenu showName className="w-full" />
+      </div>
     </aside>
   );
 }
