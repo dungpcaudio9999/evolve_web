@@ -18,16 +18,18 @@ Component đã sửa so với bản gốc: _chưa có_.
 | File | Vai trò | Task |
 |---|---|---|
 | `form-field.tsx` ✅ | Nhãn + ô nhập + dòng lỗi (liên kết `aria-describedby`) | W3-A1 |
+| `auth-guard.tsx` ✅ | `AuthGuard` (bọc `(main)`: chưa đăng nhập → `/login?next=…`, nghe 401 để đăng xuất), `GuestGuard` (bọc `(auth)`: đã đăng nhập → vào app) | W3-A2 |
+| `apply-api-error.ts` ✅ | Đưa lỗi API lên form: lỗi từng trường (400) và 401/409 vào đúng ô, còn lại toast | W3-A2 |
 
 ### `layout/`: khung trang · A
 | File | Vai trò | Task |
 |---|---|---|
-| `sidebar.tsx` ✅ | Logo, link Issues/Projects (màn hình ≥ md); menu người dùng thêm ở W3 | W2-A4 |
+| `sidebar.tsx` ✅ | Logo, link Issues/Projects, menu người dùng ở cuối (màn hình ≥ md) | W2-A4, W3-A2 |
 | `header.tsx` ✅ | `<Header title actions />`: tiêu đề trang (tiếng Anh), nút hành động, thanh mobile | W2-A4 |
 | `mobile-nav.tsx` ✅ | Thanh icon điều hướng cho màn hình < md | W2-A4 |
 | `nav-items.ts` ✅ | Danh sách mục điều hướng (`NAV_ITEMS`), hàm `isActive` | W2-A4 |
 | `logo.tsx` ✅ | Chữ "Evolve" (Panchang + gradient) | W2-A4 |
-| `user-menu.tsx` | Avatar, đăng xuất | W3-A2 |
+| `user-menu.tsx` ✅ | Avatar + tên, email, "Đăng xuất" (cuối sidebar; header trên mobile) | W3-A2 |
 
 ### `common/`: component nhỏ dùng nhiều nơi · C
 | File | Vai trò | Task |

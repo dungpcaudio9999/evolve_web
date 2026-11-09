@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { Logo } from './logo';
 import { MobileNav } from './mobile-nav';
+import { UserMenu } from './user-menu';
 
 interface HeaderProps {
   /** Tiêu đề trang (tiếng Anh, vì font tiêu đề không có chữ Việt có dấu). */
@@ -17,6 +18,7 @@ export function Header({ title, actions }: HeaderProps) {
       <div className="ml-auto flex items-center gap-2">
         {actions}
         <MobileNav />
+        <UserMenu className="md:hidden" />
       </div>
     </header>
   );

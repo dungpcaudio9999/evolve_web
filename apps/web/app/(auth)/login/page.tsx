@@ -3,28 +3,39 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema } from '@evolve/shared';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
 import type { z } from 'zod';
+import { applyApiError } from '@/components/auth/apply-api-error';
 import { FormField } from '@/components/auth/form-field';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { safeNextPath, useAuthStore } from '@/store/auth-store';
 
 type LoginForm = z.input<typeof loginSchema>;
 
-export default function LoginPage() {
+function LoginContent() {
+  const login = useAuthStore((s) => s.login);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm<LoginForm, unknown, z.output<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });
 
-  const onSubmit = handleSubmit(() => {
-    // W3-A2: gọi auth-store.login() và chuyển sang /issues.
-    toast.info('Đăng nhập sẽ được nối với API ở W3-A2');
+  const onSubmit = handleSubmit(async (values) => {
+    try {
+      await login(values);
+      router.replace(safeNextPath(searchParams.get('next')));
+    } catch (error) {
+      applyApiError(error, setError, { 401: 'password' });
+    }
   });
 
   return (
@@ -53,7 +64,7 @@ export default function LoginPage() {
             {...register('password')}
           />
           <Button type="submit" className="w-full" disabled={isSubmitting}>
-            Đăng nhập
+            {isSubmitting ? 'Đang đăng nhập…' : 'Đăng nhập'}
           </Button>
           <p className="text-center text-sm text-muted-foreground">
             Chưa có tài khoản?{' '}
@@ -64,5 +75,14 @@ export default function LoginPage() {
         </form>
       </CardContent>
     </Card>
+  );
+}
+
+/** useSearchParams cần Suspense để trang vẫn được render tĩnh khi build. */
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginContent />
+    </Suspense>
   );
 }

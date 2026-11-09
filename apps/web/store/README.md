@@ -10,7 +10,7 @@ Giữ **dữ liệu và trạng thái** của ứng dụng. Store là **nơi duy
 |---|---|---|---|
 | `issues-store.ts` ✅ | Danh sách issue + dữ liệu tham chiếu (users, labels, projects). Hiện dùng dữ liệu mẫu | `addIssue`, `updateIssue`, `deleteIssue`, `setStatus`, `moveIssue`; helper `groupByStatus`. W4-C1 thêm `fetchIssues` | C · W2-C1, W4-C1 |
 | `projects-store.ts` | Danh sách project | `fetchProjects`, `addProject`, `updateProject`, `deleteProject` | A · W4-A1 |
-| `auth-store.ts` | Người dùng, token | `login`, `register`, `logout`, `fetchMe` | A · W3-A2 |
+| `auth-store.ts` ✅ | Người dùng, trạng thái đăng nhập (`idle`/`loading`/`authenticated`/`guest`) | `init` (gọi `/auth/me`), `login`, `register`, `logout`; helper `safeNextPath` | A · W3-A2 |
 | `filter-store.ts` | Bộ lọc đang chọn (nếu không lưu hết lên URL) | `setFilter`, `clearFilters` | A · W5-A3 |
 | `ui-store.ts` ✅ | Trạng thái giao diện: modal tạo issue mở/đóng | `openCreateIssue`, `closeCreateIssue`, `setCreateIssueOpen` | C · W3-C2 |
 
