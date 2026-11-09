@@ -6,6 +6,8 @@ interface StatusIconProps {
   /** Kích thước (px). Mặc định 14. */
   size?: number;
   className?: string;
+  /** Icon chỉ để trang trí (đã có chữ bên cạnh): ẩn khỏi trình đọc màn hình, không có <title>. */
+  decorative?: boolean;
 }
 
 /**
@@ -13,13 +15,14 @@ interface StatusIconProps {
  * Backlog = vòng nét đứt, Todo = vòng rỗng, In Progress = vòng nửa,
  * Done = tròn đầy có dấu tích, Canceled = tròn đầy có dấu x.
  */
-export function StatusIcon({ status, size = 14, className }: StatusIconProps) {
+export function StatusIcon({ status, size = 14, className, decorative }: StatusIconProps) {
   const { color, name } = STATUS_BY_ID[status];
 
   return (
     <svg
-      role="img"
-      aria-label={name}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : name}
+      aria-hidden={decorative || undefined}
       width={size}
       height={size}
       viewBox="0 0 14 14"
@@ -27,7 +30,7 @@ export function StatusIcon({ status, size = 14, className }: StatusIconProps) {
       className={cn('shrink-0', className)}
       style={{ color }}
     >
-      <title>{name}</title>
+      {!decorative && <title>{name}</title>}
       {status === 'BACKLOG' && (
         <circle cx="7" cy="7" r="6" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2" />
       )}

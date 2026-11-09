@@ -6,6 +6,8 @@ interface PriorityIconProps {
   /** Kích thước (px). Mặc định 14. */
   size?: number;
   className?: string;
+  /** Icon chỉ để trang trí (đã có chữ bên cạnh): ẩn khỏi trình đọc màn hình, không có <title>. */
+  decorative?: boolean;
 }
 
 /** Số cột được tô đậm cho từng mức (trên tổng 3 cột). */
@@ -16,21 +18,22 @@ const FILLED_BARS: Partial<Record<Priority, number>> = { HIGH: 3, MEDIUM: 2, LOW
  * High/Medium/Low = 3 cột với 3/2/1 cột tô đậm. Contract không có màu cho priority
  * nên icon dùng `currentColor` (màu chữ hiện tại); Urgent luôn dùng màu destructive (kể cả khi truyền className màu).
  */
-export function PriorityIcon({ priority, size = 14, className }: PriorityIconProps) {
+export function PriorityIcon({ priority, size = 14, className, decorative }: PriorityIconProps) {
   const { name } = PRIORITY_BY_ID[priority];
   const filled = FILLED_BARS[priority];
 
   return (
     <svg
-      role="img"
-      aria-label={name}
+      role={decorative ? undefined : 'img'}
+      aria-label={decorative ? undefined : name}
+      aria-hidden={decorative || undefined}
       width={size}
       height={size}
       viewBox="0 0 14 14"
       fill="none"
       className={cn('shrink-0', className, priority === 'URGENT' && 'text-destructive')}
     >
-      <title>{name}</title>
+      {!decorative && <title>{name}</title>}
       {priority === 'NO_PRIORITY' && (
         <g fill="currentColor" opacity="0.6">
           <rect x="1.5" y="6.25" width="2.5" height="1.5" rx="0.5" />
