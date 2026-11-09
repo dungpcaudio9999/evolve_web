@@ -25,7 +25,7 @@ describeDb('Auth (e2e)', () => {
   });
 
   afterAll(async () => {
-    await prisma.user.deleteMany({ where: { email: { endsWith: '@evolve.test' } } });
+    await prisma.user.deleteMany({ where: { email } });
     await app.close();
   });
 

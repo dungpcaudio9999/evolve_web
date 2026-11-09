@@ -25,7 +25,7 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | `src/prisma/` | `PrismaService` (kết nối lười, `isHealthy()`), `PrismaModule` (global) | – |
 | `src/common/` | `filters/all-exceptions.filter.ts`: mọi lỗi trả về dạng `{ statusCode, message, errors?, path, timestamp }`, lỗi Prisma P2002/P2025/P2003 → 409/404/400. Guard, decorator thêm ở W3 | – |
 | `prisma/` | Schema, migration, seed | [prisma/README.md](prisma/README.md) |
-| `test/` | Test e2e (Jest + Supertest). `auth.e2e-spec.ts` cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
+| `test/` | Test e2e (Jest + Supertest). `auth.e2e-spec.ts`, `projects.e2e-spec.ts` cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
 
 ## Biến môi trường
 | Biến | Ví dụ | Ý nghĩa |
@@ -47,7 +47,7 @@ pnpm --filter api build        # build ra dist/
 pnpm --filter api start:prod   # chạy bản build
 pnpm --filter api lint         # kiểm tra (lint:fix để tự sửa)
 pnpm --filter api typecheck
-pnpm --filter api test         # unit test + e2e test
+pnpm --filter api test         # unit test + e2e test (e2e chạy tuần tự --runInBand vì dùng chung DB)
 ```
 
 ## Xác thực (JWT)
@@ -72,7 +72,7 @@ Xem đầy đủ tại Swagger http://localhost:4000/docs hoặc [docs/api/](../
 | GET | `/health` | Kiểm tra API và DB → `{ status: 'ok', db: 'up' \| 'down', timestamp }` | Không | ✅ W1-B2, W2-B3 |
 | POST | `/auth/register`, `/auth/login` | Đăng ký (201), đăng nhập (200) → `{ accessToken, user }`; email trùng 409, sai mật khẩu 401 | Không | ✅ W3-B1 |
 | GET | `/auth/me` | Người dùng hiện tại | Có | ✅ W3-B1 |
-| GET/POST/PATCH/DELETE | `/projects…` | CRUD project | Có | W3-B2 |
+| GET/POST/PATCH/DELETE | `/projects`, `/projects/:id` | CRUD project **của chính mình** (người khác → 404); key trùng → 409; không đổi được key; xóa → 204 | Có | ✅ W3-B2 |
 | GET/POST/PATCH/DELETE | `/issues…`, `PATCH /issues/:id/move` | CRUD issue, kéo thả | Có | W4-B1, W5-B1 |
 | GET | `/users`, `/labels` | Danh sách người dùng, nhãn | Có | W4-B2 |
 

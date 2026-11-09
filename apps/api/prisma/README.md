@@ -35,9 +35,9 @@ Khi tạo issue (W4-B1): trong một transaction, tăng `Project.issueCounter` l
 ## Dữ liệu mẫu (seed)
 | Tài khoản | Mật khẩu | Ghi chú |
 |---|---|---|
-| `an@evolve.dev` (Nguyễn Văn An) | `password123` | Chủ của cả 2 project |
-| `binh@evolve.dev` (Trần Thị Bình) | `password123` | Được giao issue |
-| `chi@evolve.dev` (Lê Minh Chi) | `password123` | Được giao issue |
+| `an@evolve.dev` (Nguyễn Văn An) | `password123` | Chủ project `EVO` |
+| `binh@evolve.dev` (Trần Thị Bình) | `password123` | Chủ project `MOB` (từ W3-B2) |
+| `chi@evolve.dev` (Lê Minh Chi) | `password123` | Chưa có project (chỉ được giao issue) |
 
 - Project `EVO` (Evolve Web) và `MOB` (Mobile App), mỗi project 15 issue phủ đủ 5 trạng thái và 5 độ ưu tiên.
 - `rank` sinh bằng `@kayron013/lexorank`: mỗi cột bắt đầu từ `0|i` rồi tăng dần (`0|j`, `0|k`…).
