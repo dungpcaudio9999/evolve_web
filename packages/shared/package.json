@@ -1,0 +1,30 @@
+{
+  "name": "@evolve/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Contract dùng chung giữa apps/web và apps/api: type, zod schema, hằng số",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "typecheck": "tsc --noEmit",
+    "test": "tsc -p tsconfig.build.json && node --test test/*.test.js",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
