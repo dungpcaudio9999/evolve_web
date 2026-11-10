@@ -26,7 +26,9 @@ export function PrioritySelector({ value, onChange, showLabel, className }: Prio
       label={`Độ ưu tiên: ${PRIORITY_BY_ID[value].name}`}
       searchPlaceholder="Đổi độ ưu tiên…"
       triggerClassName={
-        showLabel ? `h-8 border px-2.5 text-sm ${className ?? ''}` : `p-1 ${className ?? ''}`
+        showLabel
+          ? `h-8 max-w-full border px-2.5 text-sm whitespace-nowrap ${className ?? ''}`
+          : `p-1 ${className ?? ''}`
       }
       trigger={
         <>

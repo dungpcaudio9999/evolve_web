@@ -1,6 +1,7 @@
 'use client';
 
 import type { Issue, UpdateIssueInput, User } from '@evolve/shared';
+import Link from 'next/link';
 import type { ComponentProps } from 'react';
 import { PriorityIcon } from '@/components/common/priority-icon';
 import { StatusIcon } from '@/components/common/status-icon';
@@ -59,7 +60,12 @@ export function IssueLine({
       ) : (
         <StatusIcon status={issue.status} />
       )}
-      <span className="min-w-0 flex-1 truncate">{issue.title}</span>
+      <Link
+        href={`/issues/${issue.id}`}
+        className="min-w-0 flex-1 truncate outline-none hover:underline focus-visible:underline"
+      >
+        {issue.title}
+      </Link>
       {issue.labels.length > 0 && (
         <span className="hidden items-center gap-1 lg:flex">
           {issue.labels.map((label) => (

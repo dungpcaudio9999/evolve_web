@@ -27,7 +27,9 @@ export function StatusSelector({ value, onChange, showLabel, className }: Status
       label={`Trạng thái: ${STATUS_BY_ID[value].name}`}
       searchPlaceholder="Đổi trạng thái…"
       triggerClassName={
-        showLabel ? `h-8 border px-2.5 text-sm ${className ?? ''}` : `p-1 ${className ?? ''}`
+        showLabel
+          ? `h-8 max-w-full border px-2.5 text-sm whitespace-nowrap ${className ?? ''}`
+          : `p-1 ${className ?? ''}`
       }
       trigger={
         <>
