@@ -18,6 +18,9 @@ Tập trung **toàn bộ tài liệu** của dự án: kế hoạch, phân công
 | [W3/README.md](W3/README.md) | Báo cáo tuần 3 |
 | [W3/HUONG_DAN.md](W3/HUONG_DAN.md) | Tuần 3: hướng dẫn chạy, dùng thử, phát triển tiếp, lỗi thường gặp |
 | [W3/NHAT_KY.md](W3/NHAT_KY.md) | Tuần 3: nhật ký quá trình thực hiện |
+| [W4/README.md](W4/README.md) | Báo cáo tuần 4 |
+| [W4/HUONG_DAN.md](W4/HUONG_DAN.md) | Tuần 4: dùng thử tính năng mới, API issues, phát triển tiếp, lỗi thường gặp 12–17 |
+| [W4/NHAT_KY.md](W4/NHAT_KY.md) | Tuần 4: nhật ký quá trình thực hiện |
 
 ## Thư mục con
 | Thư mục | Vai trò | Người phụ trách | File dự kiến |
