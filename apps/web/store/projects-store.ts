@@ -9,6 +9,8 @@ interface ProjectsState {
   status: LoadStatus;
   /** Tải danh sách project của người dùng hiện tại (GET /projects). */
   fetchProjects: () => Promise<void>;
+  /** Tải một project (trang chi tiết) và cập nhật vào danh sách. Không thấy → null. */
+  fetchProject: (id: string) => Promise<Project | null>;
   /** Ném ApiError (409 key trùng, 400 dữ liệu sai) để form hiển thị. */
   addProject: (input: CreateProjectInput) => Promise<Project>;
   updateProject: (id: string, patch: UpdateProjectInput) => Promise<Project>;
@@ -31,6 +33,17 @@ export const useProjectsStore = create<ProjectsState>()((set, get) => ({
       set({ projects: projects.sort(byCreatedAt), status: 'ready' });
     } catch {
       set({ status: 'error' });
+    }
+  },
+
+  fetchProject: async (id) => {
+    try {
+      const project = await api.get<Project>(`/projects/${id}`, { toastOnError: false });
+      const others = get().projects.filter((p) => p.id !== id);
+      set({ projects: [...others, project].sort(byCreatedAt) });
+      return project;
+    } catch {
+      return null;
     }
   },
 

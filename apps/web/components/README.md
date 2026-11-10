@@ -68,6 +68,7 @@ Component đã sửa so với bản gốc: _chưa có_.
 | `project-line.tsx` ✅ | Một dòng project (icon, tên, key, ngày), bấm mở chi tiết | W4-A1 |
 | `project-list.tsx` ✅ | Danh sách, tự tải; trạng thái đang tải / lỗi / rỗng | W4-A1 |
 | `project-form-modal.tsx` ✅ | Tạo hoặc sửa project (khi sửa khóa key); key trùng báo tại ô | W4-A1 |
+| `project-detail.tsx` ✅ | Trang chi tiết project: tên, key, số issue, sửa, xóa (cảnh báo xóa cả issue), danh sách issue của project | W4-A2 |
 | `project-icon.tsx` ✅ | Ô vuông màu project với emoji hoặc chữ cái của key | W4-A1 |
 | `project-colors.ts` ✅ | Bảng màu chọn cho project (theo taalas) | W4-A1 |
 

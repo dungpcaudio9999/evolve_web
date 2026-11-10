@@ -29,7 +29,7 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 | `(main)/issues/page.tsx` ✅ | `/issues` | Danh sách issue (W2-C3); board, filter bar thêm ở W5 | C · W2-C3, W5-C1 |
 | `(main)/issues/[id]/page.tsx` ✅ | `/issues/:id` | Chi tiết issue (header hiện mã EVO-12); issue của người khác → "Không tìm thấy" | C · W4-C3 |
 | `(main)/projects/page.tsx` ✅ | `/projects` | Danh sách project + nút "New project" | A · W4-A1 |
-| `(main)/projects/[id]/page.tsx` | `/projects/:id` | Issue của một project | A · W4-A2 |
+| `(main)/projects/[id]/page.tsx` ✅ | `/projects/:id` | Chi tiết project + issue của project; "New issue" chọn sẵn project | A · W4-A2 |
 
 ## Quy ước
 - `page.tsx` chỉ ghép component; logic đặt trong `components/` và `store/`.
