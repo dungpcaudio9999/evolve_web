@@ -28,7 +28,7 @@ Tên trong ngoặc `( )` chỉ dùng để nhóm, **không** xuất hiện trên
 | `(main)/layout.tsx` ✅ | – | `AuthGuard` + sidebar + vùng nội dung + modal tạo issue; mỗi trang tự render `<Header>` | A · W2-A4, W3-A2 |
 | `(main)/issues/page.tsx` ✅ | `/issues` | Danh sách issue (W2-C3); board, filter bar thêm ở W5 | C · W2-C3, W5-C1 |
 | `(main)/issues/[id]/page.tsx` | `/issues/:id` | Chi tiết issue | C · W4-C3 |
-| `(main)/projects/page.tsx` | `/projects` | Hiện là khung tạm (W2-A4); danh sách project ở W4 | A · W4-A2 |
+| `(main)/projects/page.tsx` ✅ | `/projects` | Danh sách project + nút "New project" | A · W4-A1 |
 | `(main)/projects/[id]/page.tsx` | `/projects/:id` | Issue của một project | A · W4-A2 |
 
 ## Quy ước
