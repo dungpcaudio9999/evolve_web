@@ -5,107 +5,130 @@ import {
   updateIssueSchema,
   type CreateIssueInput,
   type Issue,
+  type IssueFilter,
   type Label,
   type MoveIssueInput,
-  type Project,
   type Status,
   type UpdateIssueInput,
   type User,
 } from '@evolve/shared';
 import { create } from 'zustand';
+import { api } from '@/lib/api-client';
 import { compareRank, rankBetween } from '@/lib/rank';
-import { SAMPLE_ISSUES, SAMPLE_LABELS, SAMPLE_PROJECTS, SAMPLE_USERS } from '@/lib/sample-data';
+import type { LoadStatus } from './projects-store';
 
 /**
- * Store issue (W2-C1). Hiện dùng dữ liệu mẫu trong bộ nhớ; W4-C1 đổi phần thân các hàm sang gọi API
- * nhưng GIỮ NGUYÊN tên và tham số để component không phải sửa.
- * Input được validate bằng zod schema trong @evolve/shared (giống API).
+ * Store issue, gọi REST API qua `lib/api-client` (W4-C1). Tên và tham số các hàm giữ như W2–W3.
+ * - Sửa/xóa: cập nhật giao diện ngay, gọi API sau; API lỗi thì hoàn tác (api-client đã hiện toast).
+ * - Thêm: chờ API vì `identifier` và `rank` do server sinh.
+ * Input được validate bằng zod schema của @evolve/shared trước khi gửi (giống API).
  */
 export interface IssuesState {
   issues: Issue[];
-  /** Dữ liệu tham chiếu để hiển thị (assignee, label, key của project). */
+  /** Dữ liệu tham chiếu để hiển thị và chọn (người được giao, nhãn). */
   users: User[];
   labels: Label[];
-  projects: Project[];
+  status: LoadStatus;
 
-  /** Tạo issue, đặt cuối cột trạng thái. Ném ZodError nếu input sai. */
-  addIssue: (input: CreateIssueInput) => Issue;
-  /** Sửa các trường; đổi `status` thì issue chuyển xuống cuối cột mới. */
-  updateIssue: (id: string, patch: UpdateIssueInput) => void;
-  deleteIssue: (id: string) => void;
-  /** Đổi trạng thái (dùng cho status-selector). */
-  setStatus: (id: string, status: Status) => void;
-  /** Kéo thả: chuyển sang `status`, đặt giữa `afterId` (phía trên) và `beforeId` (phía dưới). */
+  /** Tải danh sách issue (GET /issues), có thể lọc theo project… */
+  fetchIssues: (filter?: IssueFilter) => Promise<void>;
+  /** Tải users và labels (GET /users, /labels). Gọi một lần, gọi lại nếu cần làm mới. */
+  fetchMeta: () => Promise<void>;
+  /** Tải một issue (trang chi tiết) và cập nhật vào danh sách. Không thấy → null. */
+  fetchIssue: (id: string) => Promise<Issue | null>;
+  /** Tạo issue, trả về issue do API tạo. Ném lỗi nếu input sai hoặc API lỗi. */
+  addIssue: (input: CreateIssueInput) => Promise<Issue>;
+  updateIssue: (id: string, patch: UpdateIssueInput) => Promise<void>;
+  deleteIssue: (id: string) => Promise<void>;
+  setStatus: (id: string, status: Status) => Promise<void>;
+  /** Kéo thả (chỉ cập nhật trên trình duyệt; API /move ở W5). */
   moveIssue: (id: string, input: MoveIssueInput) => void;
+  /** Xóa dữ liệu khi đăng xuất. */
+  reset: () => void;
 }
 
-let localId = 0;
-const newId = () => `local-${Date.now().toString(36)}-${(localId++).toString(36)}`;
+const EMPTY = {
+  issues: [] as Issue[],
+  users: [] as User[],
+  labels: [] as Label[],
+  status: 'idle' as LoadStatus,
+};
 
-/** Rank để đặt issue xuống cuối cột `status` (bỏ qua chính nó). */
-function rankAtEnd(issues: Issue[], status: Status, exceptId?: string): string {
-  const column = issues.filter((i) => i.status === status && i.id !== exceptId).sort(compareRank);
-  return rankBetween(column.at(-1)?.rank ?? null, null);
-}
-
-function nextIdentifier(issues: Issue[], project: Project): string {
-  const prefix = `${project.key}-`;
-  const max = issues
-    .filter((i) => i.projectId === project.id && i.identifier.startsWith(prefix))
-    .reduce((m, i) => Math.max(m, Number(i.identifier.slice(prefix.length)) || 0), 0);
-  return `${prefix}${max + 1}`;
-}
+/** Thay (hoặc thêm) một issue trong danh sách. */
+const upsert = (issues: Issue[], issue: Issue) =>
+  issues.some((i) => i.id === issue.id)
+    ? issues.map((i) => (i.id === issue.id ? issue : i))
+    : [...issues, issue];
 
 export const useIssuesStore = create<IssuesState>()((set, get) => ({
-  issues: SAMPLE_ISSUES,
-  users: SAMPLE_USERS,
-  labels: SAMPLE_LABELS,
-  projects: SAMPLE_PROJECTS,
+  ...EMPTY,
 
-  addIssue: (input) => {
+  fetchIssues: async (filter) => {
+    set({ status: 'loading' });
+    try {
+      const issues = await api.get<Issue[]>('/issues', { query: { ...filter } });
+      set({ issues, status: 'ready' });
+    } catch {
+      set({ status: 'error' });
+    }
+  },
+
+  fetchMeta: async () => {
+    const [users, labels] = await Promise.all([
+      api.get<User[]>('/users'),
+      api.get<Label[]>('/labels'),
+    ]);
+    set({ users, labels });
+  },
+
+  fetchIssue: async (id) => {
+    try {
+      const issue = await api.get<Issue>(`/issues/${id}`, { toastOnError: false });
+      set({ issues: upsert(get().issues, issue) });
+      return issue;
+    } catch {
+      return null;
+    }
+  },
+
+  addIssue: async (input) => {
     const data = createIssueSchema.parse(input);
-    const { issues, projects, labels } = get();
-    const project = projects.find((p) => p.id === data.projectId);
-    if (!project) throw new Error(`Không tìm thấy project ${data.projectId}`);
-
-    const now = new Date().toISOString();
-    const issue: Issue = {
-      id: newId(),
-      identifier: nextIdentifier(issues, project),
-      title: data.title,
-      description: data.description ?? null,
-      status: data.status,
-      priority: data.priority,
-      rank: rankAtEnd(issues, data.status),
-      projectId: data.projectId,
-      assigneeId: data.assigneeId ?? null,
-      labels: labels.filter((l) => data.labelIds.includes(l.id)),
-      createdAt: now,
-      updatedAt: now,
-    };
-    set({ issues: [...issues, issue] });
+    const issue = await api.post<Issue>('/issues', data);
+    set({ issues: upsert(get().issues, issue) });
     return issue;
   },
 
-  updateIssue: (id, patch) => {
+  updateIssue: async (id, patch) => {
     const data = updateIssueSchema.parse(patch);
-    set(({ issues, labels }) => ({
-      issues: issues.map((issue) => {
-        if (issue.id !== id) return issue;
-        const { labelIds, ...fields } = data;
-        const statusChanged = data.status !== undefined && data.status !== issue.status;
-        return {
-          ...issue,
-          ...Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined)),
-          ...(labelIds ? { labels: labels.filter((l) => labelIds.includes(l.id)) } : {}),
-          ...(statusChanged ? { rank: rankAtEnd(issues, data.status!, id) } : {}),
-          updatedAt: new Date().toISOString(),
-        };
-      }),
-    }));
+    const before = get().issues.find((i) => i.id === id);
+    if (!before) return;
+
+    // Cập nhật tạm ngay để giao diện phản hồi tức thì.
+    const { labelIds, ...fields } = data;
+    const optimistic: Issue = {
+      ...before,
+      ...Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== undefined)),
+      ...(labelIds && { labels: get().labels.filter((l) => labelIds.includes(l.id)) }),
+    };
+    set({ issues: upsert(get().issues, optimistic) });
+
+    try {
+      const saved = await api.patch<Issue>(`/issues/${id}`, data);
+      set({ issues: upsert(get().issues, saved) });
+    } catch {
+      set({ issues: upsert(get().issues, before) });
+    }
   },
 
-  deleteIssue: (id) => set(({ issues }) => ({ issues: issues.filter((i) => i.id !== id) })),
+  deleteIssue: async (id) => {
+    const before = get().issues;
+    set({ issues: before.filter((i) => i.id !== id) });
+    try {
+      await api.delete(`/issues/${id}`);
+    } catch {
+      set({ issues: before });
+    }
+  },
 
   setStatus: (id, status) => get().updateIssue(id, { status }),
 
@@ -116,14 +139,17 @@ export const useIssuesStore = create<IssuesState>()((set, get) => ({
         (otherId && issues.find((i) => i.id === otherId)?.rank) || null;
       const after = rankOf(afterId);
       const before = rankOf(beforeId);
-      const rank = after || before ? rankBetween(after, before) : rankAtEnd(issues, status, id);
-      return {
-        issues: issues.map((i) =>
-          i.id === id ? { ...i, status, rank, updatedAt: new Date().toISOString() } : i,
-        ),
-      };
+      const lastInColumn = issues
+        .filter((i) => i.status === status && i.id !== id)
+        .sort(compareRank)
+        .at(-1)?.rank;
+      const rank =
+        after || before ? rankBetween(after, before) : rankBetween(lastInColumn ?? null, null);
+      return { issues: issues.map((i) => (i.id === id ? { ...i, status, rank } : i)) };
     });
   },
+
+  reset: () => set(EMPTY),
 }));
 
 /** Nhóm issue theo trạng thái, mỗi nhóm sắp theo rank. Luôn có đủ 5 key. */

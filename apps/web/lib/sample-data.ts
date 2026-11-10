@@ -1,6 +1,6 @@
 /**
- * Dữ liệu mẫu cho frontend khi chưa nối API (W2–W3). Khớp với seed của apps/api (prisma/seed.ts)
- * nhưng chỉ lấy project EVO. Xóa file này sau khi store chuyển sang gọi API (W4-C1).
+ * Dữ liệu mẫu, **chỉ dùng cho trang /dev/ui và test** (từ W4-C1 app lấy dữ liệu thật qua API).
+ * Khớp với seed của apps/api (prisma/seed.ts) nhưng chỉ lấy project EVO.
  * Thời gian cố định để server và trình duyệt render giống nhau (tránh lỗi hydration).
  */
 import type { Issue, Label, Priority, Project, Status, User } from '@evolve/shared';

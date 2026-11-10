@@ -10,7 +10,7 @@ Chứa **code không phải component và không phải store**: gọi HTTP, hà
 |---|---|---|
 | `api-client.ts` ✅ | Bọc `fetch`: base URL từ `NEXT_PUBLIC_API_URL`, gắn `Authorization: Bearer <token>`, parse JSON, ném `ApiError`, hiện toast; 401 → xóa token + phát `UNAUTHORIZED_EVENT` | C · W3-C3 |
 | `utils.ts` ✅ | Re-export `cn()` từ gói `cn` (gộp className, thay cho clsx + tailwind-merge; component shadcn style `radix-nova` import trực tiếp từ gói này nên **không xóa** dependency `cn`) | C · W1-C2 |
-| `sample-data.ts` ✅ | Dữ liệu mẫu (khớp seed của API, project EVO). Xóa sau W4-C1 | C · W2-C1 |
+| `sample-data.ts` | Dữ liệu mẫu, **chỉ dùng cho `/dev/ui` và test** (app lấy dữ liệu thật qua API từ W4-C1) | C · W2-C1 |
 | `format.ts` ✅ | `formatShortDate` ("2 thg 11", cố định múi giờ Việt Nam để tránh lỗi hydration) | C · W2-C2 |
 | `rank.ts` ✅ | `rankBetween(before, after)` (lexorank), `compareRank` | C · W2-C1 |
 | `token.ts` ✅ | `getToken` / `setToken` / `clearToken` (localStorage, an toàn khi chạy trên server) | C · W3-C3 |
