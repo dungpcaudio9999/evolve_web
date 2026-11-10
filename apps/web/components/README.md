@@ -18,7 +18,7 @@ Component đã sửa so với bản gốc: _chưa có_.
 | File | Vai trò | Task |
 |---|---|---|
 | `form-field.tsx` ✅ | Nhãn + ô nhập + dòng lỗi (liên kết `aria-describedby`) | W3-A1 |
-| `auth-guard.tsx` ✅ | `AuthGuard` (bọc `(main)`: chưa đăng nhập → `/login?next=…`, nghe 401 để đăng xuất), `GuestGuard` (bọc `(auth)`: đã đăng nhập → vào app) | W3-A2 |
+| `auth-guard.tsx` ✅ | `AuthGuard` (bọc `(main)`: phiên hết hạn → `/login?next=…`; tự đăng xuất → `/login` không giữ trang cũ; nghe 401 để đăng xuất), `GuestGuard` (bọc `(auth)`: đã đăng nhập → vào app) | W3-A2 |
 | `apply-api-error.ts` ✅ | Đưa lỗi API lên form: lỗi từng trường (400) và 401/409 vào đúng ô, còn lại toast | W3-A2 |
 
 ### `layout/`: khung trang · A

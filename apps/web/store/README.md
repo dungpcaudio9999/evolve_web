@@ -10,7 +10,7 @@ Giữ **dữ liệu và trạng thái** của ứng dụng. Store là **nơi duy
 |---|---|---|---|
 | `issues-store.ts` ✅ | Issue + users, labels **từ API**; `status` tải | `fetchIssues`, `fetchIssue`, `fetchMeta`, `addIssue`, `updateIssue`, `deleteIssue`, `setStatus` (async, cập nhật ngay rồi hoàn tác nếu API lỗi), `moveIssue` (local đến W5), `reset`; helper `groupByStatus` | C · W2-C1, W4-C1 |
 | `projects-store.ts` ✅ | Danh sách project của người dùng (API), `status` tải | `fetchProjects`, `fetchProject`, `addProject`, `updateProject`, `deleteProject`, `reset` | A · W4-A1, W4-A2 |
-| `auth-store.ts` ✅ | Người dùng, trạng thái đăng nhập (`idle`/`loading`/`authenticated`/`guest`) | `init` (gọi `/auth/me`), `login`, `register`, `logout`; helper `safeNextPath` | A · W3-A2 |
+| `auth-store.ts` ✅ | Người dùng, trạng thái đăng nhập (`idle`/`loading`/`authenticated`/`guest`) | `init` (gọi `/auth/me`), `login`, `register`, `logout(reason)`; đăng nhập/đăng xuất **xóa dữ liệu issue và project của người trước**; helper `safeNextPath` | A · W3-A2, W4-A3 |
 | `filter-store.ts` | Bộ lọc đang chọn (nếu không lưu hết lên URL) | `setFilter`, `clearFilters` | A · W5-A3 |
 | `ui-store.ts` ✅ | Trạng thái giao diện: modal tạo issue mở/đóng, project chọn sẵn (`createIssueProjectId`) | `openCreateIssue`, `closeCreateIssue`, `setCreateIssueOpen` | C · W3-C2 |
 

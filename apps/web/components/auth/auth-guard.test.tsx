@@ -42,6 +42,13 @@ describe('AuthGuard', () => {
     await waitFor(() => expect(replace).toHaveBeenCalledWith('/login?next=%2Fissues'));
     expect(useAuthStore.getState().status).toBe('guest');
   });
+
+  it('tự đăng xuất → /login, không giữ ?next', async () => {
+    useAuthStore.setState({ status: 'authenticated', user });
+    render(<AuthGuard>Nội dung bí mật</AuthGuard>);
+    act(() => useAuthStore.getState().logout());
+    await waitFor(() => expect(replace).toHaveBeenCalledWith('/login'));
+  });
 });
 
 describe('GuestGuard', () => {
