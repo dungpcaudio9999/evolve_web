@@ -42,7 +42,7 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `issues/`: tính năng issue · C (riêng `filter-bar` do A làm)
 | File | Vai trò | Task |
 |---|---|---|
-| `issue-line.tsx` ✅ | Nhận thêm thuộc tính của `div` (ref, onContextMenu…) để bọc bằng `ContextMenuTrigger asChild`. Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
+| `issue-line.tsx` ✅ | Tiêu đề là link tới `/issues/[id]`. Nhận thêm thuộc tính của `div` (ref, onContextMenu…) để bọc bằng `ContextMenuTrigger asChild`. Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
 | `issue-list.tsx` ✅ | List nhóm theo trạng thái (ẩn nhóm rỗng), header có số lượng, bấm để thu gọn; prop `projectId` để lọc theo project | W2-C3 |
 | `selector-popover.tsx` ✅ | Popover + Command dùng chung: tìm kiếm, bàn phím, dấu tích lựa chọn hiện tại | W3-C1 |
 | `status-selector.tsx` ✅ | Chọn trạng thái (`showLabel` để hiện kèm tên, dùng trong modal) | W3-C1 |
@@ -55,7 +55,8 @@ Component đã sửa so với bản gốc: _chưa có_.
 | `project-selector.tsx` ✅ | Chọn project trong modal | W3-C2 |
 | `issue-context-menu.tsx` ✅ | Menu chuột phải: mở issue, đổi trạng thái / độ ưu tiên (menu con), xóa | W4-C2 |
 | `delete-issue-dialog.tsx` ✅ | Hộp thoại xác nhận xóa issue (AlertDialog) | W4-C2 |
-| `issue-detail.tsx` | Nội dung trang chi tiết | W4-C3 |
+| `issue-detail.tsx` ✅ | Nội dung trang chi tiết: tiêu đề, mô tả (lưu khi rời ô), panel thuộc tính, xóa | W4-C3 |
+| `editable-title.tsx` ✅ | Tiêu đề sửa tại chỗ: Enter/rời ô lưu, Esc hủy, bỏ trống giữ tiêu đề cũ | W4-C3 |
 | `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` | Board kéo thả | W5-C1 |
 | `view-switcher.tsx` | Chuyển list/board | W5-C1 |
 | `search-command.tsx` | Tìm kiếm Ctrl+K | W5-C3 |
