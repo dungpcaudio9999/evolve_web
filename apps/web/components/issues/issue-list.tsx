@@ -2,8 +2,9 @@
 
 import { STATUSES, type Status } from '@evolve/shared';
 import { ChevronRight } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { StatusIcon } from '@/components/common/status-icon';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { groupByStatus, useIssuesStore } from '@/store/issues-store';
 import { IssueLine } from './issue-line';
@@ -21,6 +22,17 @@ export function IssueList({ projectId }: IssueListProps) {
   const allIssues = useIssuesStore((s) => s.issues);
   const users = useIssuesStore((s) => s.users);
   const updateIssue = useIssuesStore((s) => s.updateIssue);
+  const status = useIssuesStore((s) => s.status);
+  const fetchIssues = useIssuesStore((s) => s.fetchIssues);
+  const fetchMeta = useIssuesStore((s) => s.fetchMeta);
+
+  // Tải issue mỗi khi mở danh sách (dữ liệu luôn mới từ DB); users/labels chỉ cần tải một lần.
+  useEffect(() => {
+    void fetchIssues(projectId ? { projectId } : undefined);
+  }, [fetchIssues, projectId]);
+  useEffect(() => {
+    if (users.length === 0) void fetchMeta().catch(() => undefined);
+  }, [fetchMeta, users.length]);
   const [collapsed, setCollapsed] = useState<Set<Status>>(() => new Set());
 
   const issues = useMemo(
@@ -38,9 +50,29 @@ export function IssueList({ projectId }: IssueListProps) {
       return next;
     });
 
+  if (status === 'loading' && issues.length === 0) {
+    return <p className="px-6 py-16 text-center text-sm text-muted-foreground">Đang tải issue…</p>;
+  }
+  if (status === 'error') {
+    return (
+      <div className="flex flex-col items-center gap-3 px-6 py-16 text-sm text-muted-foreground">
+        Không tải được danh sách issue.
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => void fetchIssues(projectId ? { projectId } : undefined)}
+        >
+          Thử lại
+        </Button>
+      </div>
+    );
+  }
   if (issues.length === 0) {
     return (
-      <p className="px-6 py-16 text-center text-sm text-muted-foreground">Chưa có issue nào.</p>
+      <p className="px-6 py-16 text-center text-sm text-muted-foreground">
+        Chưa có issue nào. Nhấn <kbd className="rounded border px-1 font-mono text-xs">C</kbd> để
+        tạo.
+      </p>
     );
   }
 
@@ -76,7 +108,7 @@ export function IssueList({ projectId }: IssueListProps) {
                     issue={issue}
                     assignee={(issue.assigneeId && userById.get(issue.assigneeId)) || null}
                     users={users}
-                    onChange={(patch) => updateIssue(issue.id, patch)}
+                    onChange={(patch) => void updateIssue(issue.id, patch)}
                   />
                 ))}
               </div>

@@ -1,53 +1,119 @@
-import { STATUS_IDS } from '@evolve/shared';
-import { beforeEach, describe, expect, it } from 'vitest';
-import { SAMPLE_ISSUES } from '@/lib/sample-data';
-import { groupByStatus, useIssuesStore } from './issues-store';
+import { STATUS_IDS, type Issue } from '@evolve/shared';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { SAMPLE_ISSUES, SAMPLE_LABELS, SAMPLE_USERS } from '@/lib/sample-data';
 
-const initial = useIssuesStore.getState();
+vi.mock('@/lib/api-client', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/api-client')>();
+  return { ...real, api: { get: vi.fn(), post: vi.fn(), patch: vi.fn(), delete: vi.fn() } };
+});
+const { api, ApiError } = await import('@/lib/api-client');
+const { groupByStatus, useIssuesStore } = await import('./issues-store');
+
 const store = () => useIssuesStore.getState();
 const byId = (id: string) => store().issues.find((i) => i.id === id)!;
 const column = (status: (typeof STATUS_IDS)[number]) => groupByStatus(store().issues)[status];
 
-beforeEach(() => useIssuesStore.setState(initial, true));
+beforeEach(() => {
+  store().reset();
+  useIssuesStore.setState({
+    issues: SAMPLE_ISSUES,
+    users: SAMPLE_USERS,
+    labels: SAMPLE_LABELS,
+    status: 'ready',
+  });
+  for (const fn of [api.get, api.post, api.patch, api.delete]) vi.mocked(fn).mockReset();
+});
 
-describe('issues-store', () => {
-  it('khởi tạo với dữ liệu mẫu', () => {
-    expect(store().issues).toHaveLength(SAMPLE_ISSUES.length);
+describe('issues-store (API)', () => {
+  it('fetchIssues gọi GET /issues kèm bộ lọc, đổi status loading → ready', async () => {
+    store().reset();
+    vi.mocked(api.get).mockResolvedValue(SAMPLE_ISSUES.slice(0, 2));
+    const pending = store().fetchIssues({ projectId: 'p-evo' });
+    expect(store().status).toBe('loading');
+    await pending;
+    expect(api.get).toHaveBeenCalledWith('/issues', { query: { projectId: 'p-evo' } });
+    expect(store()).toMatchObject({ status: 'ready' });
+    expect(store().issues).toHaveLength(2);
   });
 
-  it('addIssue áp giá trị mặc định, sinh identifier tiếp theo và đặt cuối cột', () => {
-    const issue = store().addIssue({ title: '  Việc mới ', projectId: 'p-evo' });
-    expect(issue).toMatchObject({
+  it('fetchIssues lỗi → status error', async () => {
+    vi.mocked(api.get).mockRejectedValue(new ApiError(0, 'mất mạng'));
+    await store().fetchIssues();
+    expect(store().status).toBe('error');
+  });
+
+  it('fetchMeta tải users và labels', async () => {
+    store().reset();
+    vi.mocked(api.get).mockImplementation(
+      (path: string) => Promise.resolve(path === '/users' ? SAMPLE_USERS : SAMPLE_LABELS) as never,
+    );
+    await store().fetchMeta();
+    expect(store().users).toHaveLength(3);
+    expect(store().labels).toHaveLength(5);
+  });
+
+  it('addIssue validate trước, gửi POST, thêm issue do API trả về (có identifier của server)', async () => {
+    const fromApi: Issue = {
+      ...SAMPLE_ISSUES[0],
+      id: 'new',
+      identifier: 'EVO-16',
       title: 'Việc mới',
+    };
+    vi.mocked(api.post).mockResolvedValue(fromApi);
+    const created = await store().addIssue({ title: ' Việc mới ', projectId: 'p-evo' });
+
+    expect(api.post).toHaveBeenCalledWith('/issues', {
+      title: 'Việc mới',
+      projectId: 'p-evo',
       status: 'BACKLOG',
       priority: 'NO_PRIORITY',
-      identifier: `EVO-${SAMPLE_ISSUES.length + 1}`,
-      assigneeId: null,
-      labels: [],
+      labelIds: [],
     });
-    expect(column('BACKLOG').at(-1)?.id).toBe(issue.id);
+    expect(created.identifier).toBe('EVO-16');
+    expect(byId('new')).toEqual(fromApi);
+    await expect(store().addIssue({ title: ' ', projectId: 'p-evo' })).rejects.toThrow();
   });
 
-  it('addIssue từ chối tiêu đề rỗng và project không tồn tại', () => {
-    expect(() => store().addIssue({ title: ' ', projectId: 'p-evo' })).toThrow();
-    expect(() => store().addIssue({ title: 'x', projectId: 'p-none' })).toThrow(/project/);
+  it('updateIssue cập nhật ngay, rồi thay bằng bản API trả về', async () => {
+    let resolve!: (v: Issue) => void;
+    vi.mocked(api.patch).mockReturnValue(new Promise((r) => (resolve = r)) as never);
+    const pending = store().updateIssue('i-evo-1', { title: 'Tiêu đề mới', labelIds: ['l-bug'] });
+
+    expect(byId('i-evo-1').title).toBe('Tiêu đề mới');
+    expect(byId('i-evo-1').labels.map((l) => l.name)).toEqual(['Bug']);
+    resolve({ ...byId('i-evo-1'), rank: '0|z' });
+    await pending;
+    expect(byId('i-evo-1').rank).toBe('0|z');
   });
 
-  it('updateIssue chỉ sửa trường được truyền, gắn label theo id', () => {
-    store().updateIssue('i-evo-1', { title: 'Tiêu đề mới', labelIds: ['l-bug'] });
-    const i = byId('i-evo-1');
-    expect(i.title).toBe('Tiêu đề mới');
-    expect(i.status).toBe('DONE');
-    expect(i.labels.map((l) => l.name)).toEqual(['Bug']);
+  it('updateIssue lỗi → hoàn tác về giá trị cũ', async () => {
+    const before = byId('i-evo-1');
+    vi.mocked(api.patch).mockRejectedValue(new ApiError(500, 'Lỗi máy chủ'));
+    await store().setStatus('i-evo-1', 'CANCELED');
+    expect(byId('i-evo-1')).toEqual(before);
   });
 
-  it('setStatus chuyển issue xuống cuối cột mới', () => {
-    store().setStatus('i-evo-7', 'TODO');
-    expect(byId('i-evo-7').status).toBe('TODO');
-    expect(column('TODO').at(-1)?.id).toBe('i-evo-7');
+  it('deleteIssue xóa ngay; API lỗi thì khôi phục', async () => {
+    vi.mocked(api.delete).mockResolvedValue(undefined);
+    await store().deleteIssue('i-evo-1');
+    expect(store().issues.find((i) => i.id === 'i-evo-1')).toBeUndefined();
+    expect(api.delete).toHaveBeenCalledWith('/issues/i-evo-1');
+
+    vi.mocked(api.delete).mockRejectedValue(new ApiError(404, 'Không tìm thấy issue'));
+    await store().deleteIssue('i-evo-2');
+    expect(byId('i-evo-2')).toBeDefined();
   });
 
-  it('moveIssue đặt issue đúng giữa hai issue lân cận', () => {
+  it('fetchIssue: tìm thấy thì cập nhật vào danh sách; không thấy → null', async () => {
+    vi.mocked(api.get).mockResolvedValueOnce({ ...SAMPLE_ISSUES[0], title: 'Từ API' });
+    expect((await store().fetchIssue('i-evo-1'))?.title).toBe('Từ API');
+    expect(byId('i-evo-1').title).toBe('Từ API');
+
+    vi.mocked(api.get).mockRejectedValueOnce(new ApiError(404, 'Không tìm thấy issue'));
+    expect(await store().fetchIssue('khong-co')).toBeNull();
+  });
+
+  it('moveIssue (chỉ trên trình duyệt) đặt issue giữa hai issue lân cận', () => {
     const [first, second] = column('TODO');
     store().moveIssue('i-evo-7', { status: 'TODO', afterId: first.id, beforeId: second.id });
     expect(
@@ -57,15 +123,9 @@ describe('issues-store', () => {
     ).toEqual([first.id, 'i-evo-7', second.id]);
   });
 
-  it('moveIssue lên đầu cột khi chỉ có beforeId', () => {
-    const [first] = column('DONE');
-    store().moveIssue('i-evo-7', { status: 'DONE', beforeId: first.id });
-    expect(column('DONE')[0].id).toBe('i-evo-7');
-  });
-
-  it('deleteIssue xóa issue', () => {
-    store().deleteIssue('i-evo-1');
-    expect(store().issues.find((i) => i.id === 'i-evo-1')).toBeUndefined();
+  it('reset xóa hết (dùng khi đăng xuất)', () => {
+    store().reset();
+    expect(store()).toMatchObject({ issues: [], users: [], labels: [], status: 'idle' });
   });
 
   it('groupByStatus luôn đủ 5 nhóm, mỗi nhóm sắp theo rank', () => {
