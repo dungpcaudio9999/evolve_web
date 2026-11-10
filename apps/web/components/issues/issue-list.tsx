@@ -1,12 +1,14 @@
 'use client';
 
-import { STATUSES, type Status } from '@evolve/shared';
+import { STATUSES, type Issue, type Status } from '@evolve/shared';
 import { ChevronRight } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { StatusIcon } from '@/components/common/status-icon';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { groupByStatus, useIssuesStore } from '@/store/issues-store';
+import { DeleteIssueDialog } from './delete-issue-dialog';
+import { IssueContextMenu } from './issue-context-menu';
 import { IssueLine } from './issue-line';
 
 interface IssueListProps {
@@ -34,6 +36,8 @@ export function IssueList({ projectId }: IssueListProps) {
     if (users.length === 0) void fetchMeta().catch(() => undefined);
   }, [fetchMeta, users.length]);
   const [collapsed, setCollapsed] = useState<Set<Status>>(() => new Set());
+  const [deleting, setDeleting] = useState<Issue | null>(null);
+  const deleteIssue = useIssuesStore((s) => s.deleteIssue);
 
   const issues = useMemo(
     () => (projectId ? allIssues.filter((i) => i.projectId === projectId) : allIssues),
@@ -103,19 +107,33 @@ export function IssueList({ projectId }: IssueListProps) {
             {!isCollapsed && (
               <div id={contentId}>
                 {groups[status.id].map((issue) => (
-                  <IssueLine
+                  <IssueContextMenu
                     key={issue.id}
                     issue={issue}
-                    assignee={(issue.assigneeId && userById.get(issue.assigneeId)) || null}
-                    users={users}
                     onChange={(patch) => void updateIssue(issue.id, patch)}
-                  />
+                    onRequestDelete={setDeleting}
+                  >
+                    <IssueLine
+                      issue={issue}
+                      assignee={(issue.assigneeId && userById.get(issue.assigneeId)) || null}
+                      users={users}
+                      onChange={(patch) => void updateIssue(issue.id, patch)}
+                    />
+                  </IssueContextMenu>
                 ))}
               </div>
             )}
           </section>
         );
       })}
+      <DeleteIssueDialog
+        issue={deleting}
+        onOpenChange={(open) => !open && setDeleting(null)}
+        onConfirm={() => {
+          if (deleting) void deleteIssue(deleting.id);
+          setDeleting(null);
+        }}
+      />
     </div>
   );
 }

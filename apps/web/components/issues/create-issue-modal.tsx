@@ -22,6 +22,7 @@ import { useIssuesStore } from '@/store/issues-store';
 import { useProjectsStore } from '@/store/projects-store';
 import { useUiStore } from '@/store/ui-store';
 import { AssigneeSelector } from './assignee-selector';
+import { LabelSelector } from './label-selector';
 import { PrioritySelector } from './priority-selector';
 import { ProjectSelector } from './project-selector';
 import { StatusSelector } from './status-selector';
@@ -41,6 +42,7 @@ export function CreateIssueModal() {
   const projectsStatus = useProjectsStore((s) => s.status);
   const fetchProjects = useProjectsStore((s) => s.fetchProjects);
   const users = useIssuesStore((s) => s.users);
+  const labels = useIssuesStore((s) => s.labels);
   const addIssue = useIssuesStore((s) => s.addIssue);
 
   useHotkey('c', openCreateIssue);
@@ -160,6 +162,17 @@ export function CreateIssueModal() {
                   users={users}
                   onChange={field.onChange}
                   showLabel
+                />
+              )}
+            />
+            <Controller
+              control={control}
+              name="labelIds"
+              render={({ field }) => (
+                <LabelSelector
+                  value={field.value ?? []}
+                  labels={labels}
+                  onChange={field.onChange}
                 />
               )}
             />
