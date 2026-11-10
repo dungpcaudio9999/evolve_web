@@ -25,7 +25,7 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | `src/prisma/` | `PrismaService` (kết nối lười, `isHealthy()`), `PrismaModule` (global) | – |
 | `src/common/` | `filters/all-exceptions.filter.ts`: mọi lỗi trả về dạng `{ statusCode, message, errors?, path, timestamp }`, lỗi Prisma P2002/P2025/P2003 → 409/404/400. Guard, decorator thêm ở W3 | – |
 | `prisma/` | Schema, migration, seed | [prisma/README.md](prisma/README.md) |
-| `test/` | Test e2e (Jest + Supertest). `auth.e2e-spec.ts`, `projects.e2e-spec.ts` cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
+| `test/` | Test e2e (Jest + Supertest). `*.e2e-spec.ts` (auth, projects, issues, users-labels, isolation) cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
 
 ## Biến môi trường
 | Biến | Ví dụ | Ý nghĩa |

@@ -27,6 +27,7 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   const status = useAuthStore((s) => s.status);
   const init = useAuthStore((s) => s.init);
   const logout = useAuthStore((s) => s.logout);
+  const logoutReason = useAuthStore((s) => s.logoutReason);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -35,13 +36,18 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   }, [status, init]);
 
   useEffect(() => {
-    window.addEventListener(UNAUTHORIZED_EVENT, logout);
-    return () => window.removeEventListener(UNAUTHORIZED_EVENT, logout);
+    const onUnauthorized = () => logout('expired');
+    window.addEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
+    return () => window.removeEventListener(UNAUTHORIZED_EVENT, onUnauthorized);
   }, [logout]);
 
   useEffect(() => {
-    if (status === 'guest') router.replace(`/login?next=${encodeURIComponent(pathname)}`);
-  }, [status, pathname, router]);
+    if (status !== 'guest') return;
+    // Tự đăng xuất: không giữ trang cũ (người đăng nhập sau có thể là người khác).
+    router.replace(
+      logoutReason === 'manual' ? '/login' : `/login?next=${encodeURIComponent(pathname)}`,
+    );
+  }, [status, logoutReason, pathname, router]);
 
   return status === 'authenticated' ? children : <AuthLoading />;
 }
