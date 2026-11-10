@@ -25,10 +25,10 @@ Request → JwtAuthGuard → Controller (validate DTO) → Service → PrismaSer
 |---|---|---|---|
 | `health/` ✅ | `GET /health` | Kiểm tra API còn sống và DB (`db: up/down`) | W1-B2, W2-B3 |
 | `auth/` ✅ | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` | Đăng ký, đăng nhập, `JwtStrategy`, `JwtAuthGuard` | W3-B1 |
-| `users/` | `GET /users` | Danh sách người dùng (để chọn assignee) | W4-B2 |
+| `users/` ✅ | `GET /users` | Danh sách người dùng (để chọn assignee), sắp theo tên | W4-B2 |
 | `projects/` ✅ | `GET/POST /projects`, `GET/PATCH/DELETE /projects/:id` | CRUD project của người dùng hiện tại; không phải chủ → 404 | W3-B2 |
 | `issues/` | `GET/POST /issues`, `GET/PATCH/DELETE /issues/:id`, `PATCH /issues/:id/move` | CRUD issue, filter, kéo thả (lexorank) | W4-B1, W5-B1 |
-| `labels/` | `GET /labels` | Danh sách nhãn | W4-B2 |
+| `labels/` ✅ | `GET /labels` | Danh sách nhãn | W4-B2 |
 
 ## Quy ước
 - Controller mỏng, logic đặt trong service. Service inject `PrismaService` (đã global, không cần import `PrismaModule`).
