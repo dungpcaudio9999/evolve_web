@@ -1,6 +1,7 @@
 'use client';
 
 import type { Issue, UpdateIssueInput, User } from '@evolve/shared';
+import type { ComponentProps } from 'react';
 import { PriorityIcon } from '@/components/common/priority-icon';
 import { StatusIcon } from '@/components/common/status-icon';
 import { UserAvatar } from '@/components/common/user-avatar';
@@ -11,7 +12,7 @@ import { LabelBadge } from './label-badge';
 import { PrioritySelector } from './priority-selector';
 import { StatusSelector } from './status-selector';
 
-interface IssueLineProps {
+interface IssueLineProps extends Omit<ComponentProps<'div'>, 'onChange'> {
   issue: Issue;
   /** Người được giao (component cha tra theo `issue.assigneeId`); null = chưa giao. */
   assignee: User | null;
@@ -27,9 +28,18 @@ interface IssueLineProps {
  * [priority] [EVO-12] [status] Tiêu đề ……… [labels] [ngày] [avatar]
  * Trên màn hình nhỏ ẩn labels và ngày để tiêu đề còn chỗ.
  */
-export function IssueLine({ issue, assignee, users = [], onChange, className }: IssueLineProps) {
+/** Thuộc tính thừa (ref, onContextMenu…) chuyển xuống thẻ div để bọc được bằng ContextMenuTrigger asChild. */
+export function IssueLine({
+  issue,
+  assignee,
+  users = [],
+  onChange,
+  className,
+  ...rest
+}: IssueLineProps) {
   return (
     <div
+      {...rest}
       className={cn(
         'group flex h-11 items-center gap-3 border-b border-border/60 px-4 text-sm transition-colors hover:bg-accent/40 md:px-6',
         onChange && 'gap-2',

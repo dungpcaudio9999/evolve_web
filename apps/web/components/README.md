@@ -10,7 +10,7 @@ Chứa toàn bộ **component React**, chia theo vai trò. Component chỉ lo hi
 ### `ui/`: component cơ bản (shadcn/ui) · C · W1-C2
 Cấu hình trong `apps/web/components.json`: style `radix-nova` (Radix UI), màu nền `neutral`, icon `lucide`. Thêm component mới: `cd apps/web && pnpm dlx shadcn@latest add <tên>`. **Hạn chế sửa trực tiếp**; nếu sửa thì ghi chú lại ở đây.
 `button` · `input` · `textarea` · `dialog` · `dropdown-menu` · `popover` · `context-menu` · `command` · `avatar` · `badge` · `tooltip` · `separator`
-Thêm ở W3-A1: `label`, `card`. Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
+Thêm ở W3-A1: `label`, `card`; W4-C2: `alert-dialog`. Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
 
 Component đã sửa so với bản gốc: _chưa có_.
 
@@ -42,18 +42,19 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `issues/`: tính năng issue · C (riêng `filter-bar` do A làm)
 | File | Vai trò | Task |
 |---|---|---|
-| `issue-line.tsx` ✅ | Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
+| `issue-line.tsx` ✅ | Nhận thêm thuộc tính của `div` (ref, onContextMenu…) để bọc bằng `ContextMenuTrigger asChild`. Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
 | `issue-list.tsx` ✅ | List nhóm theo trạng thái (ẩn nhóm rỗng), header có số lượng, bấm để thu gọn; prop `projectId` để lọc theo project | W2-C3 |
 | `selector-popover.tsx` ✅ | Popover + Command dùng chung: tìm kiếm, bàn phím, dấu tích lựa chọn hiện tại | W3-C1 |
 | `status-selector.tsx` ✅ | Chọn trạng thái (`showLabel` để hiện kèm tên, dùng trong modal) | W3-C1 |
 | `priority-selector.tsx` ✅ | Chọn độ ưu tiên | W3-C1 |
 | `assignee-selector.tsx` ✅ | Chọn người được giao, có lựa chọn "Chưa giao" (`null`) | W3-C1 |
 | `label-badge.tsx` ✅ | Nhãn dạng viên thuốc có chấm màu | W2-C2 |
-| `label-selector.tsx` | Chọn nhãn | W4-C2 |
+| `label-selector.tsx` ✅ | Chọn **nhiều** nhãn (bật/tắt, popover vẫn mở), dùng trong modal và trang chi tiết | W4-C2 |
 | `create-issue-modal.tsx` ✅ | Modal tạo issue (gắn trong layout `(main)`), phím C, Ctrl+Enter để gửi | W3-C2 |
 | `new-issue-button.tsx` ✅ | Nút "New issue" trong Header | W3-C2 |
 | `project-selector.tsx` ✅ | Chọn project trong modal | W3-C2 |
-| `issue-context-menu.tsx` | Menu chuột phải | W4-C2 |
+| `issue-context-menu.tsx` ✅ | Menu chuột phải: mở issue, đổi trạng thái / độ ưu tiên (menu con), xóa | W4-C2 |
+| `delete-issue-dialog.tsx` ✅ | Hộp thoại xác nhận xóa issue (AlertDialog) | W4-C2 |
 | `issue-detail.tsx` | Nội dung trang chi tiết | W4-C3 |
 | `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` | Board kéo thả | W5-C1 |
 | `view-switcher.tsx` | Chuyển list/board | W5-C1 |
