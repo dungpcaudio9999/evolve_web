@@ -74,7 +74,7 @@ Xem đầy đủ tại Swagger http://localhost:4000/docs hoặc [docs/api/](../
 | GET | `/auth/me` | Người dùng hiện tại | Có | ✅ W3-B1 |
 | GET/POST/PATCH/DELETE | `/projects`, `/projects/:id` | CRUD project **của chính mình** (người khác → 404); key trùng → 409; không đổi được key; xóa → 204 | Có | ✅ W3-B2 |
 | GET/POST/PATCH/DELETE | `/issues…`, `PATCH /issues/:id/move` | CRUD issue, kéo thả | Có | W4-B1, W5-B1 |
-| GET | `/users`, `/labels` | Danh sách người dùng, nhãn | Có | W4-B2 |
+| GET | `/users`, `/labels` | Danh sách người dùng (để chọn người được giao), nhãn | Có | ✅ W4-B2 |
 
 ## Liên quan
 - Task: W1-B1…W6-B2 trong [docs/TIMELINE.md](../../docs/TIMELINE.md)
