@@ -38,6 +38,7 @@ export function CreateIssueModal() {
   const open = useUiStore((s) => s.createIssueOpen);
   const setOpen = useUiStore((s) => s.setCreateIssueOpen);
   const openCreateIssue = useUiStore((s) => s.openCreateIssue);
+  const presetProjectId = useUiStore((s) => s.createIssueProjectId);
   const projects = useProjectsStore((s) => s.projects);
   const projectsStatus = useProjectsStore((s) => s.status);
   const fetchProjects = useProjectsStore((s) => s.fetchProjects);
@@ -45,7 +46,7 @@ export function CreateIssueModal() {
   const labels = useIssuesStore((s) => s.labels);
   const addIssue = useIssuesStore((s) => s.addIssue);
 
-  useHotkey('c', openCreateIssue);
+  useHotkey('c', () => openCreateIssue());
 
   const defaults = (): FormInput => ({
     title: '',
@@ -53,7 +54,7 @@ export function CreateIssueModal() {
     status: 'BACKLOG',
     priority: 'NO_PRIORITY',
     assigneeId: null,
-    projectId: projects[0]?.id ?? '',
+    projectId: presetProjectId ?? projects[0]?.id ?? '',
     labelIds: [],
   });
 

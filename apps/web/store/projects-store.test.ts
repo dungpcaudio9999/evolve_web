@@ -66,6 +66,14 @@ describe('projects-store', () => {
     expect(state().projects.map((p) => p.id)).toEqual(['b']);
   });
 
+  it('fetchProject: thấy thì thêm/cập nhật vào danh sách; 404 → null', async () => {
+    vi.mocked(api.get).mockResolvedValueOnce(project('x', '2026-11-05'));
+    expect((await state().fetchProject('x'))?.id).toBe('x');
+    expect(state().projects.map((p) => p.id)).toEqual(['x']);
+    vi.mocked(api.get).mockRejectedValueOnce(new ApiError(404, 'Không tìm thấy project'));
+    expect(await state().fetchProject('khong-co')).toBeNull();
+  });
+
   it('reset xóa dữ liệu (dùng khi đăng xuất)', () => {
     useProjectsStore.setState({ projects: [project('a', '1')], status: 'ready' });
     state().reset();
