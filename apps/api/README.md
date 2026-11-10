@@ -73,7 +73,8 @@ Xem đầy đủ tại Swagger http://localhost:4000/docs hoặc [docs/api/](../
 | POST | `/auth/register`, `/auth/login` | Đăng ký (201), đăng nhập (200) → `{ accessToken, user }`; email trùng 409, sai mật khẩu 401 | Không | ✅ W3-B1 |
 | GET | `/auth/me` | Người dùng hiện tại | Có | ✅ W3-B1 |
 | GET/POST/PATCH/DELETE | `/projects`, `/projects/:id` | CRUD project **của chính mình** (người khác → 404); key trùng → 409; không đổi được key; xóa → 204 | Có | ✅ W3-B2 |
-| GET/POST/PATCH/DELETE | `/issues…`, `PATCH /issues/:id/move` | CRUD issue, kéo thả | Có | W4-B1, W5-B1 |
+| GET/POST/PATCH/DELETE | `/issues`, `/issues/:id` | CRUD issue trong project của mình; lọc `projectId`, `status`, `priority`, `assigneeId`, `q`; tự sinh `KEY-số`; người khác → 404 | Có | ✅ W4-B1 |
+| PATCH | `/issues/:id/move` | Kéo thả trên board (đổi status + vị trí) | Có | W5-B1 |
 | GET | `/users`, `/labels` | Danh sách người dùng (để chọn người được giao), nhãn | Có | ✅ W4-B2 |
 
 ## Liên quan
