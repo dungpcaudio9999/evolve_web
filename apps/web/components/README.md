@@ -63,9 +63,11 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `projects/`: tính năng project · A
 | File | Vai trò | Task |
 |---|---|---|
-| `project-line.tsx` | Một dòng project | W4-A1 |
-| `project-list.tsx` | Danh sách project | W4-A1 |
-| `create-project-modal.tsx` | Tạo/sửa project | W4-A1 |
+| `project-line.tsx` ✅ | Một dòng project (icon, tên, key, ngày), bấm mở chi tiết | W4-A1 |
+| `project-list.tsx` ✅ | Danh sách, tự tải; trạng thái đang tải / lỗi / rỗng | W4-A1 |
+| `project-form-modal.tsx` ✅ | Tạo hoặc sửa project (khi sửa khóa key); key trùng báo tại ô | W4-A1 |
+| `project-icon.tsx` ✅ | Ô vuông màu project với emoji hoặc chữ cái của key | W4-A1 |
+| `project-colors.ts` ✅ | Bảng màu chọn cho project (theo taalas) | W4-A1 |
 
 ## Quy ước
 - Tên file `kebab-case.tsx`, tên component `PascalCase`.
