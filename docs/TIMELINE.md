@@ -107,11 +107,11 @@ Mã task có dạng `W<tuần>-<người><số>`, ví dụ `W3-B1`. Dùng mã n�
 |---|---|---|---|---|---|
 | W5-A1 | A | Tạo Neon DB; deploy API lên Render (cùng B) | 2 | W4-B1 | `GET /health` online trả về 200 |
 | W5-A2 | A | Deploy web lên Vercel; biến môi trường; CORS | 2 | W5-A1 | Đăng nhập được trên link online |
-| W5-A3 | A | `components/issues/filter-bar.tsx`: lọc theo status/priority/assignee/project, lưu lên URL (nuqs) | 3 | W4-C1 | Lọc đúng, giữ nguyên bộ lọc khi tải lại |
+| W5-A3 | A | `components/issues/filter-bar.tsx`: lọc theo status/priority/assignee/project, lưu lên URL (nuqs; **thực tế:** `useSearchParams`) | 3 | W4-C1 | Lọc đúng, giữ nguyên bộ lọc khi tải lại |
 | W5-B1 | B | `PATCH /issues/:id/move`: đổi status + tính `rank` bằng lexorank | 3 | W4-B1 | Thứ tự giữ đúng sau khi tải lại |
 | W5-B2 | B | Test API cho issues (CRUD, move) | 2 | W5-B1 | `pnpm test` xanh |
 | W5-B3 | B | Migrate và seed trên Neon; hỗ trợ deploy | 2 | W5-A1 | DB online có dữ liệu |
-| W5-C1 | C | `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` (react-dnd); nút chuyển list/board (nuqs) | 3 | W4-C1 | Board hiển thị 5 cột theo trạng thái |
+| W5-C1 | C | `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` (react-dnd); nút chuyển list/board (nuqs). **Thực tế:** gộp vào `issue-board.tsx`, HTML5 DnD; nút chuyển nằm trong `filter-bar.tsx` | 3 | W4-C1 | Board hiển thị 5 cột theo trạng thái |
 | W5-C2 | C | Kéo thả gọi `PATCH /issues/:id/move`: cập nhật giao diện trước, gọi API sau, lỗi thì trả về vị trí cũ | 2 | W5-C1, W5-B1 | Kéo thả mượt, không bị nhảy |
 | W5-C3 | C | `search-command.tsx`: Ctrl+K (cmdk) tìm issue theo từ khóa, Enter để mở chi tiết | 2 | W4-C1 | Tìm và mở được issue |
 | W5-ALL | Cả nhóm | Họp tuần, **demo M5 trên link online** | 1 | – | – |

@@ -10,9 +10,9 @@
 |---|---|
 | Framework | Next.js 15 (App Router), React 19, TypeScript |
 | Giao diện | Tailwind CSS v4, shadcn/ui, lucide-react |
-| State | Zustand, nuqs (URL state) |
+| State | Zustand; filter và list/board lưu trên URL bằng `useSearchParams` |
 | Form | react-hook-form + zod |
-| Khác | react-dnd, lexorank, cmdk, sonner, date-fns |
+| Khác | HTML5 Drag and Drop (board), lexorank, cmdk, sonner, date-fns |
 
 ## Cấu trúc
 | Thư mục | Vai trò | README |

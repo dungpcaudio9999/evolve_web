@@ -151,9 +151,9 @@ Chi tiết từng task theo tuần: [docs/TIMELINE.md](docs/TIMELINE.md).
 | UI components | **shadcn/ui** (Radix UI) | Button, dialog, dropdown, popover, command… |
 | Icon | **lucide-react**, **@remixicon/react** | |
 | State | **Zustand** | Store cho issues, projects, filter, giao diện |
-| URL state | **nuqs** | Lưu filter và chế độ list/board lên URL |
+| URL state | `useSearchParams` của Next.js | Lưu filter và chế độ list/board lên URL (W5: thay cho nuqs, xem [báo cáo tuần 5](docs/W5/README.md#3-quyết-định-cần-cả-nhóm-biết)) |
 | Form và validate | **react-hook-form** + **zod** | Dùng chung zod schema với backend |
-| Kéo thả | **react-dnd** + **react-dnd-html5-backend** | Board Kanban |
+| Kéo thả | **HTML5 Drag and Drop** có sẵn của trình duyệt | Board Kanban (W5: thay cho react-dnd) |
 | Sắp thứ tự | **@kayron013/lexorank** | Thứ tự issue trong cột; cùng thuật toán với API |
 | Command palette | **cmdk** | Tìm kiếm Ctrl+K |
 | Thông báo | **sonner** | Toast |
@@ -177,7 +177,7 @@ POST   /auth/register        POST /auth/login        GET /auth/me
 GET    /projects             POST /projects          GET|PATCH|DELETE /projects/:id
 GET    /issues?projectId&status&priority&assigneeId&q
 POST   /issues               GET|PATCH|DELETE /issues/:id
-PATCH  /issues/:id/move      # đổi status + rank khi kéo thả
+PATCH  /issues/:id/move      # { status, afterId?, beforeId? } → đổi status + rank khi kéo thả
 GET    /users                GET /labels
 ```
 
@@ -217,7 +217,7 @@ evolve_web/
 │   │   ├── components/
 │   │   │   ├── ui/                 # shadcn components
 │   │   │   ├── layout/             # sidebar, header
-│   │   │   ├── issues/             # issue-line, issue-list, issue-board, selectors, modal…
+│   │   │   ├── issues/             # issue-line, issue-list, issue-board, issues-view, filter-bar, search-command, selectors, modal…
 │   │   │   ├── projects/           # project-line, project-list, project modal
 │   │   │   └── common/             # status-icon, priority-icon, user-avatar, empty-state
 │   │   ├── store/                  # Zustand: issues, projects, filter, auth, ui

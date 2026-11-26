@@ -38,7 +38,7 @@
 **Tính năng**
 - **Auth (FE):** trang `/login`, `/register`; `store/auth-store.ts`; lưu token; bảo vệ route; đăng xuất.
 - **Projects (FE):** `components/projects/`, trang `/projects` và `/projects/[id]`, `store/projects-store.ts`.
-- **Filter bar:** lọc theo status/priority/assignee, lưu lên URL bằng nuqs.
+- **Filter bar:** lọc theo status/priority/assignee, lưu lên URL (`useSearchParams` của Next.js, thay cho nuqs từ W5).
 
 **Triển khai và kiểm thử**
 - Deploy: Vercel (web), Render (api), Neon (DB); cấu hình biến môi trường.
@@ -52,7 +52,7 @@
 Repo chạy được bằng một lệnh · `packages/shared` · design system và layout · trang login/register · trang Projects · filter bar · link deploy · báo cáo và slide.
 
 ### Kỹ năng cần có
-Next.js App Router, Tailwind v4 / CSS variables, shadcn/ui, Zustand, nuqs, Git, GitHub Actions, Vercel/Render.
+Next.js App Router, Tailwind v4 / CSS variables, shadcn/ui, Zustand, URL state (`useSearchParams`), Git, GitHub Actions, Vercel/Render.
 
 ---
 
@@ -102,9 +102,9 @@ NestJS (module, controller, service, guard), Prisma, PostgreSQL, JWT. **Tuần 1
 - **Tạo/sửa:** `create-issue-modal` (react-hook-form + zod), phím tắt `C`.
 - **Xóa:** `issue-context-menu` (chuột phải).
 - **Chi tiết:** trang `/issues/[id]`: sửa tiêu đề, mô tả và các thuộc tính.
-- **Board:** `issue-board`, `board-column`, `board-card` bằng react-dnd. Khi thả: cập nhật giao diện trước, gọi `PATCH /issues/:id/move` sau, nếu lỗi thì trả issue về vị trí cũ.
+- **Board:** `issue-board`, `board-column`, `board-card` bằng HTML5 Drag and Drop (W5: thay cho react-dnd; thực tế gộp trong `issue-board.tsx`). Khi thả: cập nhật giao diện trước, gọi `PATCH /issues/:id/move` sau, nếu lỗi thì trả issue về vị trí cũ.
 - **Tìm kiếm:** command palette Ctrl+K (cmdk).
-- **Chuyển chế độ list/board** (lưu lên URL bằng nuqs).
+- **Chuyển chế độ list/board** (lưu lên URL bằng `useSearchParams`).
 
 **Hoàn thiện giao diện**
 - Responsive (360px đến 1440px), trạng thái rỗng, trạng thái đang tải.
@@ -116,7 +116,7 @@ NestJS (module, controller, service, guard), Prisma, PostgreSQL, JWT. **Tuần 1
 `apps/web` khởi tạo xong · component UI và common · `api-client` · `issues-store` · list, modal, selector, chi tiết, board, tìm kiếm hoạt động với API thật.
 
 ### Kỹ năng cần có
-React 19, Next.js App Router, TypeScript, Zustand, react-hook-form, react-dnd, shadcn/ui.
+React 19, Next.js App Router, TypeScript, Zustand, react-hook-form, HTML5 Drag and Drop, shadcn/ui.
 
 ---
 

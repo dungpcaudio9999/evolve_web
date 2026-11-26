@@ -57,10 +57,10 @@ Component đã sửa so với bản gốc: _chưa có_.
 | `delete-issue-dialog.tsx` ✅ | Hộp thoại xác nhận xóa issue (AlertDialog) | W4-C2 |
 | `issue-detail.tsx` ✅ | Nội dung trang chi tiết: tiêu đề, mô tả (lưu khi rời ô), panel thuộc tính, xóa | W4-C3 |
 | `editable-title.tsx` ✅ | Tiêu đề sửa tại chỗ: Enter/rời ô lưu, Esc hủy, bỏ trống giữ tiêu đề cũ | W4-C3 |
-| `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` | Board kéo thả | W5-C1 |
-| `view-switcher.tsx` | Chuyển list/board | W5-C1 |
-| `search-command.tsx` | Tìm kiếm Ctrl+K | W5-C3 |
-| `filter-bar.tsx` | Thanh lọc (A) | W5-A3 |
+| `issue-board.tsx` ✅ | Board 5 cột, kéo thả HTML5 (nửa trên/dưới thẻ = đặt trước/sau; khoảng trống = cuối cột), menu chuột phải. Cột và thẻ viết chung một file | W5-C1, W5-C2 |
+| `issues-view.tsx` ✅ | Ghép thanh lọc + list/board; đọc/ghi bộ lọc và chế độ xem trên URL | W5-A3, W5-C1 |
+| `filter-bar.tsx` ✅ | Thanh lọc status/priority/assignee/project (chọn nhiều) + nút chuyển List/Board (A) | W5-A3 |
+| `search-command.tsx` ✅ | Ctrl+K / ⌘K: tìm theo tiêu đề hoặc mã, Enter mở chi tiết (gắn trong layout `(main)`) | W5-C3 |
 
 ### `projects/`: tính năng project · A
 | File | Vai trò | Task |
