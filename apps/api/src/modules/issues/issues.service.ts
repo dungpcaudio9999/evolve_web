@@ -3,11 +3,12 @@ import type {
   CreateIssueInput,
   Issue,
   IssueFilter,
+  MoveIssueInput,
   Status,
   UpdateIssueInput,
 } from '@evolve/shared';
 import { Prisma } from '@prisma/client';
-import { rankAfter } from '../../common/utils/rank';
+import { rankAfter, rankBetween } from '../../common/utils/rank';
 import { ISSUE_INCLUDE, toIssue } from '../../common/utils/to-issue';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -94,12 +95,50 @@ export class IssuesService {
           ...(input.assigneeId !== undefined && { assigneeId: input.assigneeId }),
           ...(statusChanged && {
             status: input.status,
-            // Đổi trạng thái → xuống cuối cột mới (kéo thả giữa các issue là PATCH /move ở tuần 5).
+            // Đổi trạng thái → xuống cuối cột mới (vị trí cụ thể: PATCH /issues/:id/move).
             rank: await this.rankAtEnd(tx, existing.projectId, input.status!, id),
           }),
           ...(input.labelIds !== undefined && {
             labels: { deleteMany: {}, create: input.labelIds.map((labelId) => ({ labelId })) },
           }),
+        },
+        include: ISSUE_INCLUDE,
+      }),
+    );
+    return toIssue(row);
+  }
+
+  async move(ownerId: string, id: string, input: MoveIssueInput): Promise<Issue> {
+    const existing = await this.findOwned(ownerId, id);
+    const { status } = input;
+    const neighbor = async (otherId: string | null | undefined) => {
+      if (!otherId) return null;
+      if (otherId === id) throw new BadRequestException('Không thể đặt issue cạnh chính nó');
+      const row = await this.prisma.issue.findFirst({
+        where: { id: otherId, project: { ownerId } },
+        select: { rank: true, status: true },
+      });
+      if (!row) throw new NotFoundException('Không tìm thấy issue lân cận');
+      if (row.status !== status) {
+        throw new BadRequestException('Issue lân cận phải cùng cột trạng thái');
+      }
+      return row.rank;
+    };
+    const above = await neighbor(input.afterId);
+    const below = await neighbor(input.beforeId);
+    if (above && below && above >= below) {
+      throw new BadRequestException('afterId phải đứng trước beforeId');
+    }
+
+    const row = await this.prisma.$transaction(async (tx) =>
+      tx.issue.update({
+        where: { id },
+        data: {
+          status,
+          rank:
+            above || below
+              ? rankBetween(above, below)
+              : await this.rankAtEnd(tx, existing.projectId, status, id),
         },
         include: ISSUE_INCLUDE,
       }),

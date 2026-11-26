@@ -21,6 +21,7 @@ Tập trung **toàn bộ tài liệu** của dự án: kế hoạch, phân công
 | [W4/README.md](W4/README.md) | Báo cáo tuần 4 |
 | [W4/HUONG_DAN.md](W4/HUONG_DAN.md) | Tuần 4: dùng thử tính năng mới, API issues, phát triển tiếp, lỗi thường gặp 12–17 |
 | [W4/NHAT_KY.md](W4/NHAT_KY.md) | Tuần 4: nhật ký quá trình thực hiện |
+| [W5/README.md](W5/README.md) | Báo cáo tuần 5 (board, filter, Ctrl+K; deploy chưa làm) |
 
 ## Thư mục con
 | Thư mục | Vai trò | Người phụ trách | File dự kiến |

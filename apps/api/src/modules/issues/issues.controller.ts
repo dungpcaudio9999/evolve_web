@@ -15,7 +15,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import type { Issue } from '@evolve/shared';
 import { CurrentUser, type AuthUser } from '../../common/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { CreateIssueDto, IssueFilterDto, UpdateIssueDto } from './dto/issue.dto';
+import { CreateIssueDto, IssueFilterDto, MoveIssueDto, UpdateIssueDto } from './dto/issue.dto';
 import { IssuesService } from './issues.service';
 
 @ApiTags('issues')
@@ -53,6 +53,19 @@ export class IssuesController {
     @Body() dto: UpdateIssueDto,
   ): Promise<Issue> {
     return this.issues.update(user.id, id, dto);
+  }
+
+  @Patch(':id/move')
+  @ApiOperation({
+    summary:
+      'Kéo thả: đổi status và đặt giữa afterId (trên) và beforeId (dưới); thiếu cả hai → cuối cột',
+  })
+  move(
+    @CurrentUser() user: AuthUser,
+    @Param('id') id: string,
+    @Body() dto: MoveIssueDto,
+  ): Promise<Issue> {
+    return this.issues.move(user.id, id, dto);
   }
 
   @Delete(':id')

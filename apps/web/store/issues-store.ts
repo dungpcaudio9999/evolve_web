@@ -41,8 +41,8 @@ export interface IssuesState {
   updateIssue: (id: string, patch: UpdateIssueInput) => Promise<void>;
   deleteIssue: (id: string) => Promise<void>;
   setStatus: (id: string, status: Status) => Promise<void>;
-  /** Kéo thả (chỉ cập nhật trên trình duyệt; API /move ở W5). */
-  moveIssue: (id: string, input: MoveIssueInput) => void;
+  /** Kéo thả: cập nhật ngay, gọi PATCH /issues/:id/move; API lỗi thì về chỗ cũ. */
+  moveIssue: (id: string, input: MoveIssueInput) => Promise<void>;
   /** Xóa dữ liệu khi đăng xuất. */
   reset: () => void;
 }
@@ -132,21 +132,31 @@ export const useIssuesStore = create<IssuesState>()((set, get) => ({
 
   setStatus: (id, status) => get().updateIssue(id, { status }),
 
-  moveIssue: (id, input) => {
-    const { status, afterId, beforeId } = moveIssueSchema.parse(input);
-    set(({ issues }) => {
-      const rankOf = (otherId: string | null | undefined) =>
-        (otherId && issues.find((i) => i.id === otherId)?.rank) || null;
-      const after = rankOf(afterId);
-      const before = rankOf(beforeId);
-      const lastInColumn = issues
-        .filter((i) => i.status === status && i.id !== id)
-        .sort(compareRank)
-        .at(-1)?.rank;
-      const rank =
-        after || before ? rankBetween(after, before) : rankBetween(lastInColumn ?? null, null);
-      return { issues: issues.map((i) => (i.id === id ? { ...i, status, rank } : i)) };
-    });
+  moveIssue: async (id, input) => {
+    const data = moveIssueSchema.parse(input);
+    const { status, afterId, beforeId } = data;
+    const issues = get().issues;
+    const before = issues.find((i) => i.id === id);
+    if (!before) return;
+
+    const rankOf = (otherId: string | null | undefined) =>
+      (otherId && issues.find((i) => i.id === otherId)?.rank) || null;
+    const above = rankOf(afterId);
+    const below = rankOf(beforeId);
+    const lastInColumn = issues
+      .filter((i) => i.status === status && i.id !== id)
+      .sort(compareRank)
+      .at(-1)?.rank;
+    const rank =
+      above || below ? rankBetween(above, below) : rankBetween(lastInColumn ?? null, null);
+    set({ issues: upsert(issues, { ...before, status, rank }) });
+
+    try {
+      const saved = await api.patch<Issue>(`/issues/${id}/move`, data);
+      set({ issues: upsert(get().issues, saved) });
+    } catch {
+      set({ issues: upsert(get().issues, before) });
+    }
   },
 
   reset: () => set(EMPTY),

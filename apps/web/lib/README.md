@@ -14,6 +14,8 @@ Chứa **code không phải component và không phải store**: gọi HTTP, hà
 | `format.ts` ✅ | `formatShortDate` ("2 thg 11", cố định múi giờ Việt Nam để tránh lỗi hydration) | C · W2-C2 |
 | `rank.ts` ✅ | `rankBetween(before, after)` (lexorank), `compareRank` | C · W2-C1 |
 | `token.ts` ✅ | `getToken` / `setToken` / `clearToken` (localStorage, an toàn khi chạy trên server) | C · W3-C3 |
+| `issue-filter.ts` ✅ | Đọc/ghi bộ lọc và chế độ xem trên URL (`parseFilter`, `parseView`, `toSearch`), lọc trên trình duyệt (`applyFilter`) | A · W5-A3 |
+| `board-drop.ts` ✅ | `dropTarget(column, draggedId, status, index)` → `{ status, afterId, beforeId }` cho `/move`; thả lại chỗ cũ → `null` | C · W5-C2 |
 
 ## Cách dùng `api-client`
 ```ts

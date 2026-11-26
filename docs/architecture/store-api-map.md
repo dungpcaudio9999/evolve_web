@@ -12,7 +12,7 @@ Mỗi hàm trong store của `apps/web` gọi endpoint nào của `apps/api`. T�
 | `addIssue(input)` | `POST /issues` | `createIssueSchema` | `Issue` | ✅ W4-C1 |
 | `updateIssue(id, patch)` | `PATCH /issues/:id` | `updateIssueSchema` | `Issue` | ✅ W4-C1 |
 | `setStatus(id, status)` | `PATCH /issues/:id` | `{ status }` | `Issue` | ✅ W4-C1 |
-| `moveIssue(id, input)` | `PATCH /issues/:id/move` | `moveIssueSchema` (`status`, `afterId`, `beforeId`) | `Issue` | Chỉ trên trình duyệt; API ở W5 |
+| `moveIssue(id, input)` | `PATCH /issues/:id/move` | `moveIssueSchema` (`status`, `afterId`, `beforeId`) | `Issue` | ✅ W5-C2 (cập nhật ngay, lỗi → về chỗ cũ) |
 | `deleteIssue(id)` | `DELETE /issues/:id` | – | `204` | ✅ W4-C1 |
 | `fetchMeta()` → `users` | `GET /users` | – | `User[]` | ✅ W4-C1 |
 | `fetchMeta()` → `labels` | `GET /labels` | – | `Label[]` | ✅ W4-C1 |
