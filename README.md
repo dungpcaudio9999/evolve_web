@@ -68,6 +68,9 @@ Mẫu đầy đủ ở [.env.example](.env.example). Không commit file `.env` t
 | api | `PORT`, `CORS_ORIGIN` | `4000`, `http://localhost:3000` |
 | web | `NEXT_PUBLIC_API_URL` | `http://localhost:4000` |
 
+## Deploy
+Web trên Vercel, API trên Render, PostgreSQL trên Neon (gói miễn phí). Các bước làm: [docs/architecture/deployment.md](docs/architecture/deployment.md).
+
 ## Tài liệu
 - [PLAN.md](PLAN.md): kế hoạch tổng
 - [docs/](docs/README.md): phân vai, timeline, quy trình làm việc

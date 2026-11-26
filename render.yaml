@@ -1,0 +1,28 @@
+# Render Blueprint cho API (W5-A1). Render → New → Blueprint → chọn repo này.
+# Hướng dẫn đầy đủ: docs/architecture/deployment.md
+services:
+  - type: web
+    name: evolve-api
+    runtime: node
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: >-
+      corepack enable &&
+      pnpm install --frozen-lockfile &&
+      pnpm --filter @evolve/shared build &&
+      pnpm --filter api build
+    # Gói free không có pre-deploy command → chạy migrate ngay trước khi khởi động.
+    startCommand: cd apps/api && pnpm exec prisma migrate deploy && node dist/main.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: '22'
+      - key: DATABASE_URL # connection string của Neon (bản không pooled), nhập tay
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: CORS_ORIGIN # URL web trên Vercel, ví dụ https://evolve-web.vercel.app
+        sync: false
