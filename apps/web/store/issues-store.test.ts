@@ -113,14 +113,34 @@ describe('issues-store (API)', () => {
     expect(await store().fetchIssue('khong-co')).toBeNull();
   });
 
-  it('moveIssue (chỉ trên trình duyệt) đặt issue giữa hai issue lân cận', () => {
+  it('moveIssue đặt issue giữa hai lân cận ngay, rồi gọi PATCH /move', async () => {
     const [first, second] = column('TODO');
-    store().moveIssue('i-evo-7', { status: 'TODO', afterId: first.id, beforeId: second.id });
+    let resolve!: (v: unknown) => void;
+    vi.mocked(api.patch).mockReturnValue(new Promise((r) => (resolve = r)) as never);
+    const done = store().moveIssue('i-evo-7', {
+      status: 'TODO',
+      afterId: first.id,
+      beforeId: second.id,
+    });
     expect(
       column('TODO')
         .map((i) => i.id)
         .slice(0, 3),
     ).toEqual([first.id, 'i-evo-7', second.id]);
+    expect(api.patch).toHaveBeenCalledWith('/issues/i-evo-7/move', {
+      status: 'TODO',
+      afterId: first.id,
+      beforeId: second.id,
+    });
+    resolve({ ...byId('i-evo-7') });
+    await done;
+  });
+
+  it('moveIssue: API lỗi → issue về trạng thái và vị trí cũ', async () => {
+    const original = byId('i-evo-7');
+    vi.mocked(api.patch).mockRejectedValue(new ApiError(500, 'Lỗi máy chủ'));
+    await store().moveIssue('i-evo-7', { status: 'DONE' });
+    expect(byId('i-evo-7')).toEqual(original);
   });
 
   it('reset xóa hết (dùng khi đăng xuất)', () => {

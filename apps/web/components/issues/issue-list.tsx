@@ -5,6 +5,7 @@ import { ChevronRight } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { StatusIcon } from '@/components/common/status-icon';
 import { Button } from '@/components/ui/button';
+import { applyFilter, type IssueFilterState } from '@/lib/issue-filter';
 import { cn } from '@/lib/utils';
 import { groupByStatus, useIssuesStore } from '@/store/issues-store';
 import { DeleteIssueDialog } from './delete-issue-dialog';
@@ -14,13 +15,15 @@ import { IssueLine } from './issue-line';
 interface IssueListProps {
   /** Chỉ hiện issue của project này (W4: trang /projects/[id]). Bỏ trống = tất cả. */
   projectId?: string;
+  /** Bộ lọc từ thanh lọc (W5-A3). Bỏ trống = không lọc. */
+  filter?: IssueFilterState;
 }
 
 /**
  * Danh sách issue nhóm theo trạng thái (thứ tự Backlog → Canceled), mỗi nhóm sắp theo rank.
  * Header nhóm có icon, tên, số lượng; bấm để thu gọn/mở. Nhóm rỗng không hiển thị.
  */
-export function IssueList({ projectId }: IssueListProps) {
+export function IssueList({ projectId, filter }: IssueListProps) {
   const allIssues = useIssuesStore((s) => s.issues);
   const users = useIssuesStore((s) => s.users);
   const updateIssue = useIssuesStore((s) => s.updateIssue);
@@ -39,9 +42,13 @@ export function IssueList({ projectId }: IssueListProps) {
   const [deleting, setDeleting] = useState<Issue | null>(null);
   const deleteIssue = useIssuesStore((s) => s.deleteIssue);
 
-  const issues = useMemo(
+  const projectIssues = useMemo(
     () => (projectId ? allIssues.filter((i) => i.projectId === projectId) : allIssues),
     [allIssues, projectId],
+  );
+  const issues = useMemo(
+    () => (filter ? applyFilter(projectIssues, filter) : projectIssues),
+    [projectIssues, filter],
   );
   const groups = useMemo(() => groupByStatus(issues), [issues]);
   const userById = useMemo(() => new Map(users.map((u) => [u.id, u])), [users]);
@@ -69,6 +76,13 @@ export function IssueList({ projectId }: IssueListProps) {
           Thử lại
         </Button>
       </div>
+    );
+  }
+  if (issues.length === 0 && projectIssues.length > 0) {
+    return (
+      <p className="px-6 py-16 text-center text-sm text-muted-foreground">
+        Không có issue nào khớp bộ lọc.
+      </p>
     );
   }
   if (issues.length === 0) {
