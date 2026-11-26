@@ -140,6 +140,30 @@ Chi tiết từng task theo tuần: [docs/TIMELINE.md](docs/TIMELINE.md).
 
 ---
 
+## Giai đoạn 8: Ứng dụng mobile (mở rộng sau MVP)
+
+**Mục tiêu:** dùng Evolve trên điện thoại, áp dụng React Native của môn học (tài liệu MA1–MA3).
+Chỉ làm sau khi xong M6. Đây là phần mở rộng, không thuộc MVP.
+
+- **Công nghệ:** React Native + **Expo** (SDK 58) + **Expo Router**; chạy thử bằng app Expo Go, không cần Android Studio.
+- **Dùng lại:** REST API (`apps/api`) và `packages/shared` (type, zod schema, hằng số); store Zustand và `api-client` viết theo cùng mẫu với web.
+- **Khác web:** giao diện dùng `View`/`Text`/`StyleSheet` (không có Tailwind, shadcn); JWT lưu trong `expo-secure-store`; API lấy từ `EXPO_PUBLIC_API_URL`.
+- **Board:** bản đầu đổi trạng thái bằng **nhấn giữ → chọn trạng thái**; kéo thả bằng cử chỉ (`react-native-gesture-handler`, `reanimated`) để sau.
+
+| # | Việc | Chức năng | Trạng thái |
+|---|---|---|---|
+| M1 | Khung `apps/mobile`: Expo Router, theme, `api-client`, `auth-store` | – | Xong: typecheck, expo-doctor, bundle Android qua; chưa thử trên điện thoại |
+| M2 | Đăng nhập / đăng ký | F7 | Đã có mã |
+| M3 | Danh sách issue nhóm theo trạng thái, kéo để tải lại, nhấn giữ đổi trạng thái | F1 | Đã có mã |
+| M4 | Chi tiết issue, sửa thuộc tính | F4 | Chưa làm |
+| M5 | Tạo issue (form + `createIssueSchema`) | F3 | Chưa làm |
+| M6 | Board cuộn ngang theo cột | F2 | Chưa làm |
+| M7 | Projects, tìm kiếm | F5, F6 | Chưa làm |
+
+Hướng dẫn cài và chạy: [apps/mobile/README.md](apps/mobile/README.md).
+
+---
+
 ## Tech stack
 
 ### Frontend
@@ -223,6 +247,10 @@ evolve_web/
 │   │   ├── store/                  # Zustand: issues, projects, filter, auth, ui
 │   │   ├── hooks/                  # hook dùng chung
 │   │   └── lib/                    # api-client, utils
+│   │
+│   ├── mobile/                     # Mobile: React Native + Expo (giai đoạn 8)
+│   │   ├── app/                    # Expo Router: (auth)/login, register; (main)/index
+│   │   ├── components/  lib/  store/
 │   │
 │   └── api/                        # Backend: NestJS
 │       ├── src/

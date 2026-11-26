@@ -135,6 +135,23 @@ Mã task có dạng `W<tuần>-<người><số>`, ví dụ `W3-B1`. Dùng mã n�
 
 ---
 
+## Tuần 7 (mở rộng): Mobile
+
+**Chỉ làm khi M6 đã xong.** Mốc **M7:** trên điện thoại (Expo Go) đăng nhập được, xem list issue, đổi trạng thái, xem chi tiết và tạo issue, gọi API online. Xem giai đoạn 8 trong [PLAN.md](../PLAN.md).
+
+| Mã | Người | Task | Giờ | Phụ thuộc | Tiêu chí xong |
+|---|---|---|---|---|---|
+| W7-A1 | A | Khung `apps/mobile` (Expo Router, theme, `api-client`, `auth-store`); `pnpm typecheck` | 2 | M6 | **Đã có mã**, typecheck và bundle Android qua; còn thử bằng Expo Go |
+| W7-A2 | A | Màn hình đăng nhập / đăng ký | 1 | W7-A1 | **Đã có mã**; đăng nhập được bằng tài khoản online |
+| W7-C1 | C | List issue nhóm theo trạng thái; kéo để tải lại; nhấn giữ để đổi trạng thái | 2 | W7-A1 | **Đã có mã**; đổi trạng thái lưu vào DB |
+| W7-C2 | C | Màn hình chi tiết `(main)/issues/[id].tsx`: sửa tiêu đề, mô tả, status, priority, assignee | 3 | W7-C1 | Sửa xong được lưu vào DB |
+| W7-C3 | C | Tạo issue (modal, `createIssueSchema`) | 2 | W7-C1 | Issue mới hiện trong list |
+| W7-B1 | B | Board cuộn ngang 5 cột (`FlatList` ngang) | 2 | W7-C1 | Hiện đủ 5 cột |
+| W7-B2 | B | Màn hình projects; ô tìm kiếm trên list | 2 | W7-C1 | Lọc được theo project và từ khóa |
+| W7-ALL | Cả nhóm | Demo trên điện thoại thật (Android và iOS nếu có) | 1 | – | – |
+
+---
+
 ## Tổng giờ theo người
 
 | Tuần | A | B | C |
