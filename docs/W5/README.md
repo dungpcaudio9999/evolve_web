@@ -9,7 +9,7 @@
 |---|---|
 | Mốc M5 | ⚠️ **Đạt một phần.** Phần code đã xong: board kéo thả lưu vào DB, filter, tìm kiếm. **Chưa deploy**, nên chưa có link online |
 | Task | 6/9 task code xong (W5-A3, B1, B2, C1, C2, C3). Chưa làm: W5-A1, A2, B3 (deploy), W5-ALL (họp, demo) |
-| Pull request | [#91](https://github.com/dungpcaudio9999/evolve_web/pull/91) từ `feature/w5` vào `dev`, CI xanh, **chưa merge** |
+| Pull request | [#91](https://github.com/dungpcaudio9999/evolve_web/pull/91) từ `feature/w5` vào `dev`, CI xanh. **Đã squash merge** (`8b01cc4`) bằng **quyền admin, bỏ qua review bắt buộc**, theo quyết định của nhóm trưởng ngày 26/11 |
 | Test tự động | **132** (shared 5 · api unit 8 + e2e 40 · web 79); tuần 4 là 121 |
 | Kiểm tra trên trình duyệt thật | **11/11 bước** kéo thả và lọc trên Chrome (API, web và PostgreSQL thật) |
 | Người làm | Toàn bộ do A làm (kể cả task của B và C), có Claude Code hỗ trợ |
@@ -92,7 +92,7 @@ Chưa thử trên trình duyệt: Ctrl+K (đã có unit test) và kéo thả tr�
 |---|---|---|
 | Thử Ctrl+K trên trình duyệt thật; xem board trên điện thoại | A | Kéo thả và lọc đã thử (mục 4) |
 | Sửa script `dev` của web cho chạy được sau proxy (bỏ `--turbopack` hoặc tự host font) | A | Hiện phải chạy `next dev` bằng tay |
-| Review và merge PR #91 vào `dev` | A (B, C review) | CI đã xanh |
+| B, C đọc lại PR #91 (đã merge không qua review) | B, C | Góp ý thì mở issue hoặc PR mới |
 | W5-A1, B3: tạo Neon DB, migrate, seed; deploy API lên Render | A, B | Cần tài khoản; làm từ máy có mạng |
 | W5-A2: deploy web lên Vercel, `NEXT_PUBLIC_API_URL`, `CORS_ORIGIN` | A | Sau W5-A1 |
 | Họp và demo M5 trên link online (W5-ALL) | Cả nhóm | Sau khi deploy |
