@@ -10,7 +10,7 @@ Chứa toàn bộ **component React**, chia theo vai trò. Component chỉ lo hi
 ### `ui/`: component cơ bản (shadcn/ui) · C · W1-C2
 Cấu hình trong `apps/web/components.json`: style `radix-nova` (Radix UI), màu nền `neutral`, icon `lucide`. Thêm component mới: `cd apps/web && pnpm dlx shadcn@latest add <tên>`. **Hạn chế sửa trực tiếp**; nếu sửa thì ghi chú lại ở đây.
 `button` · `input` · `textarea` · `dialog` · `dropdown-menu` · `popover` · `context-menu` · `command` · `avatar` · `badge` · `tooltip` · `separator`
-Thêm ở W3-A1: `label`, `card`. Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
+Thêm ở W3-A1: `label`, `card`; W4-C2: `alert-dialog`. Ngoài ra có `input-group` (do `command` cần) và `sonner.tsx` (toast, viết lại cố định theme tối, không dùng `next-themes`; `<Toaster />` đã đặt trong `app/layout.tsx`). Xem thử tất cả tại trang `/dev/ui`.
 
 Component đã sửa so với bản gốc: _chưa có_.
 
@@ -18,7 +18,7 @@ Component đã sửa so với bản gốc: _chưa có_.
 | File | Vai trò | Task |
 |---|---|---|
 | `form-field.tsx` ✅ | Nhãn + ô nhập + dòng lỗi (liên kết `aria-describedby`) | W3-A1 |
-| `auth-guard.tsx` ✅ | `AuthGuard` (bọc `(main)`: chưa đăng nhập → `/login?next=…`, nghe 401 để đăng xuất), `GuestGuard` (bọc `(auth)`: đã đăng nhập → vào app) | W3-A2 |
+| `auth-guard.tsx` ✅ | `AuthGuard` (bọc `(main)`: phiên hết hạn → `/login?next=…`; tự đăng xuất → `/login` không giữ trang cũ; nghe 401 để đăng xuất), `GuestGuard` (bọc `(auth)`: đã đăng nhập → vào app) | W3-A2 |
 | `apply-api-error.ts` ✅ | Đưa lỗi API lên form: lỗi từng trường (400) và 401/409 vào đúng ô, còn lại toast | W3-A2 |
 
 ### `layout/`: khung trang · A
@@ -42,30 +42,35 @@ Component đã sửa so với bản gốc: _chưa có_.
 ### `issues/`: tính năng issue · C (riêng `filter-bar` do A làm)
 | File | Vai trò | Task |
 |---|---|---|
-| `issue-line.tsx` ✅ | Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
+| `issue-line.tsx` ✅ | Tiêu đề là link tới `/issues/[id]`. Nhận thêm thuộc tính của `div` (ref, onContextMenu…) để bọc bằng `ContextMenuTrigger asChild`. Có `onChange` thì icon priority/status/avatar thành selector. Một dòng issue: priority, mã, status, tiêu đề, labels (≥ lg), ngày (≥ sm), avatar. Nhận `assignee` từ component cha | W2-C2 |
 | `issue-list.tsx` ✅ | List nhóm theo trạng thái (ẩn nhóm rỗng), header có số lượng, bấm để thu gọn; prop `projectId` để lọc theo project | W2-C3 |
 | `selector-popover.tsx` ✅ | Popover + Command dùng chung: tìm kiếm, bàn phím, dấu tích lựa chọn hiện tại | W3-C1 |
 | `status-selector.tsx` ✅ | Chọn trạng thái (`showLabel` để hiện kèm tên, dùng trong modal) | W3-C1 |
 | `priority-selector.tsx` ✅ | Chọn độ ưu tiên | W3-C1 |
 | `assignee-selector.tsx` ✅ | Chọn người được giao, có lựa chọn "Chưa giao" (`null`) | W3-C1 |
 | `label-badge.tsx` ✅ | Nhãn dạng viên thuốc có chấm màu | W2-C2 |
-| `label-selector.tsx` | Chọn nhãn | W4-C2 |
+| `label-selector.tsx` ✅ | Chọn **nhiều** nhãn (bật/tắt, popover vẫn mở), dùng trong modal và trang chi tiết | W4-C2 |
 | `create-issue-modal.tsx` ✅ | Modal tạo issue (gắn trong layout `(main)`), phím C, Ctrl+Enter để gửi | W3-C2 |
 | `new-issue-button.tsx` ✅ | Nút "New issue" trong Header | W3-C2 |
 | `project-selector.tsx` ✅ | Chọn project trong modal | W3-C2 |
-| `issue-context-menu.tsx` | Menu chuột phải | W4-C2 |
-| `issue-detail.tsx` | Nội dung trang chi tiết | W4-C3 |
-| `issue-board.tsx`, `board-column.tsx`, `board-card.tsx` | Board kéo thả | W5-C1 |
-| `view-switcher.tsx` | Chuyển list/board | W5-C1 |
-| `search-command.tsx` | Tìm kiếm Ctrl+K | W5-C3 |
-| `filter-bar.tsx` | Thanh lọc (A) | W5-A3 |
+| `issue-context-menu.tsx` ✅ | Menu chuột phải: mở issue, đổi trạng thái / độ ưu tiên (menu con), xóa | W4-C2 |
+| `delete-issue-dialog.tsx` ✅ | Hộp thoại xác nhận xóa issue (AlertDialog) | W4-C2 |
+| `issue-detail.tsx` ✅ | Nội dung trang chi tiết: tiêu đề, mô tả (lưu khi rời ô), panel thuộc tính, xóa | W4-C3 |
+| `editable-title.tsx` ✅ | Tiêu đề sửa tại chỗ: Enter/rời ô lưu, Esc hủy, bỏ trống giữ tiêu đề cũ | W4-C3 |
+| `issue-board.tsx` ✅ | Board 5 cột, kéo thả HTML5 (nửa trên/dưới thẻ = đặt trước/sau; khoảng trống = cuối cột), menu chuột phải. Cột và thẻ viết chung một file | W5-C1, W5-C2 |
+| `issues-view.tsx` ✅ | Ghép thanh lọc + list/board; đọc/ghi bộ lọc và chế độ xem trên URL | W5-A3, W5-C1 |
+| `filter-bar.tsx` ✅ | Thanh lọc status/priority/assignee/project (chọn nhiều) + nút chuyển List/Board (A) | W5-A3 |
+| `search-command.tsx` ✅ | Ctrl+K / ⌘K: tìm theo tiêu đề hoặc mã, Enter mở chi tiết (gắn trong layout `(main)`) | W5-C3 |
 
 ### `projects/`: tính năng project · A
 | File | Vai trò | Task |
 |---|---|---|
-| `project-line.tsx` | Một dòng project | W4-A1 |
-| `project-list.tsx` | Danh sách project | W4-A1 |
-| `create-project-modal.tsx` | Tạo/sửa project | W4-A1 |
+| `project-line.tsx` ✅ | Một dòng project (icon, tên, key, ngày), bấm mở chi tiết | W4-A1 |
+| `project-list.tsx` ✅ | Danh sách, tự tải; trạng thái đang tải / lỗi / rỗng | W4-A1 |
+| `project-form-modal.tsx` ✅ | Tạo hoặc sửa project (khi sửa khóa key); key trùng báo tại ô | W4-A1 |
+| `project-detail.tsx` ✅ | Trang chi tiết project: tên, key, số issue, sửa, xóa (cảnh báo xóa cả issue), danh sách issue của project | W4-A2 |
+| `project-icon.tsx` ✅ | Ô vuông màu project với emoji hoặc chữ cái của key | W4-A1 |
+| `project-colors.ts` ✅ | Bảng màu chọn cho project (theo taalas) | W4-A1 |
 
 ## Quy ước
 - Tên file `kebab-case.tsx`, tên component `PascalCase`.

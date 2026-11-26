@@ -19,8 +19,10 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useHotkey } from '@/hooks/use-hotkey';
 import { useIssuesStore } from '@/store/issues-store';
+import { useProjectsStore } from '@/store/projects-store';
 import { useUiStore } from '@/store/ui-store';
 import { AssigneeSelector } from './assignee-selector';
+import { LabelSelector } from './label-selector';
 import { PrioritySelector } from './priority-selector';
 import { ProjectSelector } from './project-selector';
 import { StatusSelector } from './status-selector';
@@ -36,11 +38,15 @@ export function CreateIssueModal() {
   const open = useUiStore((s) => s.createIssueOpen);
   const setOpen = useUiStore((s) => s.setCreateIssueOpen);
   const openCreateIssue = useUiStore((s) => s.openCreateIssue);
-  const projects = useIssuesStore((s) => s.projects);
+  const presetProjectId = useUiStore((s) => s.createIssueProjectId);
+  const projects = useProjectsStore((s) => s.projects);
+  const projectsStatus = useProjectsStore((s) => s.status);
+  const fetchProjects = useProjectsStore((s) => s.fetchProjects);
   const users = useIssuesStore((s) => s.users);
+  const labels = useIssuesStore((s) => s.labels);
   const addIssue = useIssuesStore((s) => s.addIssue);
 
-  useHotkey('c', openCreateIssue);
+  useHotkey('c', () => openCreateIssue());
 
   const defaults = (): FormInput => ({
     title: '',
@@ -48,7 +54,7 @@ export function CreateIssueModal() {
     status: 'BACKLOG',
     priority: 'NO_PRIORITY',
     assigneeId: null,
-    projectId: projects[0]?.id ?? '',
+    projectId: presetProjectId ?? projects[0]?.id ?? '',
     labelIds: [],
   });
 
@@ -57,11 +63,18 @@ export function CreateIssueModal() {
     control,
     handleSubmit,
     reset,
-    formState: { errors },
+    getValues,
+    setValue,
+    formState: { errors, isSubmitting },
   } = useForm<FormInput, unknown, FormOutput>({
     resolver: zodResolver(createIssueSchema),
     defaultValues: defaults(),
   });
+
+  // Lần đầu mở modal mà chưa có danh sách project thì tải.
+  useEffect(() => {
+    if (open && projectsStatus === 'idle') void fetchProjects();
+  }, [open, projectsStatus, fetchProjects]);
 
   // Mỗi lần mở là một form mới.
   useEffect(() => {
@@ -69,13 +82,18 @@ export function CreateIssueModal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
-  const onSubmit = handleSubmit((values) => {
+  // Project tải xong sau khi đã mở: chỉ điền ô project nếu còn trống (không xóa chữ đang gõ).
+  useEffect(() => {
+    if (open && projects[0] && !getValues('projectId')) setValue('projectId', projects[0].id);
+  }, [open, projects, getValues, setValue]);
+
+  const onSubmit = handleSubmit(async (values) => {
     try {
-      const issue = addIssue({ ...values, description: values.description || null });
+      const issue = await addIssue({ ...values, description: values.description || null });
       toast.success(`Đã tạo ${issue.identifier}`, { description: issue.title });
       setOpen(false);
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Không tạo được issue');
+    } catch {
+      // api-client đã hiện toast lỗi; giữ modal mở để người dùng sửa và gửi lại.
     }
   });
 
@@ -150,6 +168,17 @@ export function CreateIssueModal() {
             />
             <Controller
               control={control}
+              name="labelIds"
+              render={({ field }) => (
+                <LabelSelector
+                  value={field.value ?? []}
+                  labels={labels}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+            <Controller
+              control={control}
               name="projectId"
               render={({ field }) => (
                 <ProjectSelector
@@ -170,7 +199,9 @@ export function CreateIssueModal() {
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
               Hủy
             </Button>
-            <Button type="submit">Tạo issue</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? 'Đang tạo…' : 'Tạo issue'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

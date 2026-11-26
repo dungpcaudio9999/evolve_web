@@ -46,13 +46,13 @@ export function AssigneeSelector({
       searchPlaceholder="Giao cho…"
       triggerClassName={
         showLabel
-          ? `h-8 border px-2.5 text-sm ${className ?? ''}`
+          ? `h-8 max-w-full border px-2.5 text-sm whitespace-nowrap ${className ?? ''}`
           : `rounded-full ${className ?? ''}`
       }
       trigger={
         <>
           <UserAvatar user={current} size={showLabel ? 20 : 22} decorative />
-          {showLabel && (current?.name ?? 'Chưa giao')}
+          {showLabel && <span className="truncate">{current?.name ?? 'Chưa giao'}</span>}
         </>
       }
     />

@@ -16,10 +16,16 @@ Tập trung **toàn bộ tài liệu** của dự án: kế hoạch, phân công
 | [W1/W1-A_TONG_KET.md](W1/W1-A_TONG_KET.md) | Tổng kết tuần 1 |
 | [W2/README.md](W2/README.md) | Báo cáo tuần 2 |
 | [W3/README.md](W3/README.md) | Báo cáo tuần 3 |
+| [W3/HUONG_DAN.md](W3/HUONG_DAN.md) | Tuần 3: hướng dẫn chạy, dùng thử, phát triển tiếp, lỗi thường gặp |
+| [W3/NHAT_KY.md](W3/NHAT_KY.md) | Tuần 3: nhật ký quá trình thực hiện |
+| [W4/README.md](W4/README.md) | Báo cáo tuần 4 |
+| [W4/HUONG_DAN.md](W4/HUONG_DAN.md) | Tuần 4: dùng thử tính năng mới, API issues, phát triển tiếp, lỗi thường gặp 12–17 |
+| [W4/NHAT_KY.md](W4/NHAT_KY.md) | Tuần 4: nhật ký quá trình thực hiện |
+| [W5/README.md](W5/README.md) | Báo cáo tuần 5 (board, filter, Ctrl+K; deploy chưa làm) |
 
 ## Thư mục con
 | Thư mục | Vai trò | Người phụ trách | File dự kiến |
 |---|---|---|---|
-| `architecture/` | Kiến trúc hệ thống, quyết định kỹ thuật | A | `overview.md` (sơ đồ web ↔ api ↔ DB), [`store-api-map.md`](architecture/store-api-map.md) ✅ (store nào gọi endpoint nào), `frontend.md` (C), `deployment.md` |
+| `architecture/` | Kiến trúc hệ thống, quyết định kỹ thuật | A | `overview.md` (sơ đồ web ↔ api ↔ DB), [`store-api-map.md`](architecture/store-api-map.md) ✅ (store nào gọi endpoint nào), `frontend.md` (C), [`deployment.md`](architecture/deployment.md) ✅ (Neon, Render, Vercel) |
 | `api/` | Tài liệu REST API | B | `endpoints.md` (danh sách endpoint, request/response mẫu), `auth.md` (luồng JWT) |
 | `database/` | Thiết kế database | B | `erd.md` hoặc `erd.png` (sơ đồ quan hệ), `models.md` (mô tả bảng và trường) |

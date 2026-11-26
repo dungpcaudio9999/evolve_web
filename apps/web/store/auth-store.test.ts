@@ -14,6 +14,8 @@ vi.mock('@/lib/api-client', async (importOriginal) => {
 
 const { api, ApiError } = await import('@/lib/api-client');
 const { safeNextPath, useAuthStore } = await import('./auth-store');
+const { useIssuesStore } = await import('./issues-store');
+const { useProjectsStore } = await import('./projects-store');
 
 const user: User = { id: 'u1', name: 'An', email: 'an@evolve.dev', avatarUrl: null, createdAt: '' };
 const initial = useAuthStore.getState();
@@ -71,7 +73,9 @@ describe('auth-store', () => {
 
     state().logout();
     expect(token.value).toBeNull();
-    expect(state()).toMatchObject({ status: 'guest', user: null });
+    expect(state()).toMatchObject({ status: 'guest', user: null, logoutReason: 'manual' });
+    state().logout('expired');
+    expect(state().logoutReason).toBe('expired');
   });
 
   it('login sai → ném ApiError, trạng thái không đổi', async () => {
@@ -79,6 +83,30 @@ describe('auth-store', () => {
     await expect(state().login({ email: 'a@b.cc', password: 'x' })).rejects.toThrow('Sai email');
     expect(state().status).toBe('idle');
     expect(token.value).toBeNull();
+  });
+});
+
+describe('cô lập dữ liệu giữa người dùng', () => {
+  const fill = () => {
+    useIssuesStore.setState({ issues: [{ id: 'i' } as never], status: 'ready' });
+    useProjectsStore.setState({ projects: [{ id: 'p' } as never], status: 'ready' });
+  };
+  const empty = () => {
+    expect(useIssuesStore.getState()).toMatchObject({ issues: [], status: 'idle' });
+    expect(useProjectsStore.getState()).toMatchObject({ projects: [], status: 'idle' });
+  };
+
+  it('logout xóa issue và project của người trước', () => {
+    fill();
+    state().logout();
+    empty();
+  });
+
+  it('đăng nhập tài khoản khác cũng xóa dữ liệu cũ', async () => {
+    fill();
+    vi.mocked(api.post).mockResolvedValue({ accessToken: 'jwt2', user: { ...user, id: 'u2' } });
+    await state().login({ email: 'b@evolve.dev', password: 'password123' });
+    empty();
   });
 });
 

@@ -1,7 +1,7 @@
 # Báo cáo tuần 3: Evolve Web
 
 > Ngày lập: 09/11/2026 · Người lập: A (nhóm trưởng) · Mốc: **M3**
-> Liên quan: [TIMELINE.md](../TIMELINE.md) · [Báo cáo tuần 2](../W2/README.md)
+> Liên quan: [Hướng dẫn](HUONG_DAN.md) · [Nhật ký thực hiện](NHAT_KY.md) · [TIMELINE.md](../TIMELINE.md) · [Báo cáo tuần 2](../W2/README.md)
 
 ## 1. Tóm tắt
 
@@ -122,6 +122,8 @@
 - **A (W4-A1, A2):** `projects-store` + trang `/projects` dùng `/projects` (API đã có từ W3-B2).
 
 ## Phụ lục: chạy lại kết quả tuần 3
+
+Hướng dẫn đầy đủ (dùng thử, gọi API, viết code tiếp, lỗi thường gặp): [HUONG_DAN.md](HUONG_DAN.md).
 
 ```bash
 git switch dev && git pull

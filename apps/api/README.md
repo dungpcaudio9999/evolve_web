@@ -25,7 +25,7 @@ REST API cho Evolve Web: xác thực người dùng, quản lý project, issue, 
 | `src/prisma/` | `PrismaService` (kết nối lười, `isHealthy()`), `PrismaModule` (global) | – |
 | `src/common/` | `filters/all-exceptions.filter.ts`: mọi lỗi trả về dạng `{ statusCode, message, errors?, path, timestamp }`, lỗi Prisma P2002/P2025/P2003 → 409/404/400. Guard, decorator thêm ở W3 | – |
 | `prisma/` | Schema, migration, seed | [prisma/README.md](prisma/README.md) |
-| `test/` | Test e2e (Jest + Supertest). `auth.e2e-spec.ts`, `projects.e2e-spec.ts` cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
+| `test/` | Test e2e (Jest + Supertest). `*.e2e-spec.ts` (auth, projects, issues, users-labels, isolation) cần PostgreSQL (`DATABASE_URL` đọc từ `.env` qua `dotenv`); không có thì tự bỏ qua | – |
 
 ## Biến môi trường
 | Biến | Ví dụ | Ý nghĩa |
@@ -73,8 +73,9 @@ Xem đầy đủ tại Swagger http://localhost:4000/docs hoặc [docs/api/](../
 | POST | `/auth/register`, `/auth/login` | Đăng ký (201), đăng nhập (200) → `{ accessToken, user }`; email trùng 409, sai mật khẩu 401 | Không | ✅ W3-B1 |
 | GET | `/auth/me` | Người dùng hiện tại | Có | ✅ W3-B1 |
 | GET/POST/PATCH/DELETE | `/projects`, `/projects/:id` | CRUD project **của chính mình** (người khác → 404); key trùng → 409; không đổi được key; xóa → 204 | Có | ✅ W3-B2 |
-| GET/POST/PATCH/DELETE | `/issues…`, `PATCH /issues/:id/move` | CRUD issue, kéo thả | Có | W4-B1, W5-B1 |
-| GET | `/users`, `/labels` | Danh sách người dùng, nhãn | Có | W4-B2 |
+| GET/POST/PATCH/DELETE | `/issues`, `/issues/:id` | CRUD issue trong project của mình; lọc `projectId`, `status`, `priority`, `assigneeId`, `q`; tự sinh `KEY-số`; người khác → 404 | Có | ✅ W4-B1 |
+| PATCH | `/issues/:id/move` | Kéo thả: `{ status, afterId?, beforeId? }` → đặt giữa hai issue (thiếu cả hai → cuối cột); lân cận khác cột / ngược thứ tự / chính nó → 400; của người khác → 404 | Có | ✅ W5-B1 |
+| GET | `/users`, `/labels` | Danh sách người dùng (để chọn người được giao), nhãn | Có | ✅ W4-B2 |
 
 ## Liên quan
 - Task: W1-B1…W6-B2 trong [docs/TIMELINE.md](../../docs/TIMELINE.md)
