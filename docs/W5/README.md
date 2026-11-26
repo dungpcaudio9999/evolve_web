@@ -9,9 +9,9 @@
 |---|---|
 | Mốc M5 | ⚠️ **Đạt một phần.** Phần code đã xong: board kéo thả lưu vào DB, filter, tìm kiếm. **Chưa deploy**, nên chưa có link online |
 | Task | 6/9 task code xong (W5-A3, B1, B2, C1, C2, C3). Chưa làm: W5-A1, A2, B3 (deploy), W5-ALL (họp, demo) |
-| Nhánh | `feature/w5`, 2 commit (`3b78b8e` api, `252f7d7` web). **Chưa push, chưa mở PR** |
+| Pull request | [#91](https://github.com/dungpcaudio9999/evolve_web/pull/91) từ `feature/w5` vào `dev`, CI xanh, **chưa merge** |
 | Test tự động | **132** (shared 5 · api unit 8 + e2e 40 · web 79); tuần 4 là 121 |
-| Kiểm tra trên trình duyệt thật | **Chưa làm**: kéo thả bằng chuột thật chưa thử |
+| Kiểm tra trên trình duyệt thật | **11/11 bước** kéo thả và lọc trên Chrome (API, web và PostgreSQL thật) |
 | Người làm | Toàn bộ do A làm (kể cả task của B và C), có Claude Code hỗ trợ |
 
 ## 2. Kết quả theo task
@@ -51,6 +51,31 @@ Chạy trên máy A520M: cài sạch bằng `pnpm install` với PostgreSQL 16 t
 
 Trên laptop ThinkPad, test web chạy lại cũng qua 79/79, sau khi sửa `node_modules` (xem mục 5).
 
+**Trên trình duyệt thật**, 11/11. Chrome được điều khiển qua DevTools Protocol, kéo bằng thao tác chuột thật (nhấn, rê, thả), không gọi thẳng hàm trong code. Dữ liệu là bản seed, đăng nhập bằng An:
+
+| Bước | Kết quả |
+|---|---|
+| Board có đủ 5 cột | Qua |
+| Kéo EVO-7 từ Backlog vào giữa thẻ 1 và 2 của Todo: giao diện đúng, DB đúng (`EVO-4 EVO-7 EVO-5 …`), đã rời Backlog | Qua (3 bước) |
+| Tải lại trang, vị trí giữ nguyên | Qua |
+| Cùng cột: kéo thẻ cuối lên đầu | Qua |
+| Thả vào khoảng trống cột Done, issue nằm cuối cột | Qua |
+| Thả lại chỗ cũ, thứ tự không đổi | Qua |
+| Bấm vào thẻ (không kéo) mở trang chi tiết | Qua |
+| `?view=board&priority=URGENT`: 2 thẻ, khớp API | Qua |
+| Không có lỗi JavaScript trên trang | Qua |
+
+Lần chạy đầu có 1 bước báo lỗi giả, do script trả về phần tử DOM thay vì true/false. Đã sửa script, seed lại và chạy lại toàn bộ.
+Chưa thử trên trình duyệt: Ctrl+K (đã có unit test) và kéo thả trên màn hình cảm ứng.
+
+| Board | Đang kéo (thẻ mờ, vạch cam chỉ chỗ thả) |
+|---|---|
+| ![](images/board.png) | ![](images/board-dragging.png) |
+
+| Sau khi tải lại (EVO-7 ở vị trí 2 của Todo) | Lọc Urgent |
+|---|---|
+| ![](images/board-after-reload.png) | ![](images/board-filter.png) |
+
 ## 5. Sự cố môi trường
 
 | Vấn đề | Cách xử lý |
@@ -58,14 +83,16 @@ Trên laptop ThinkPad, test web chạy lại cũng qua 79/79, sau khi sửa `nod
 | Laptop chặn `registry.npmjs.org` và Docker Hub, nên không cài được thư viện và không có PostgreSQL | Chạy test đầy đủ trên máy A520M. Không thêm thư viện mới (mục 3) |
 | Laptop dùng Node < 14 | Đã cài Node 22 bằng nvm |
 | `node_modules` trên laptop hỏng: symlink của pnpm không đúng, typecheck web báo 53 lỗi trong code cũ | Script `~/fix-pnpm-links.mjs` dựng lại symlink bằng **đường dẫn tương đối** (chạy offline; mặc định chỉ xem, `--apply` để sửa). Sau đó test web qua 79/79 |
+| Mạng đi internet qua proxy `proxy.fpt.vn`; **Turbopack không đi qua proxy được**, không tải được Google Fonts nên mọi trang báo lỗi 500 | Chạy web bằng `next dev` (webpack), không dùng `pnpm dev`. Node 22 cần `NODE_USE_ENV_PROXY=1` để dùng biến `HTTPS_PROXY` |
 | Ổ SFTP (gvfs) không tạo được symlink | Không chạy `pnpm install` và test qua ổ mạng; chạy trực tiếp trên laptop hoặc trên bản clone ở A520M |
 
 ## 6. Việc còn lại
 
 | Việc | Ai | Ghi chú |
 |---|---|---|
-| Thử kéo thả, filter, Ctrl+K trên trình duyệt thật; chụp ảnh cho báo cáo | A | Chưa làm |
-| Push `feature/w5`, mở PR vào `dev`, chờ CI xanh | A | Push từ máy có mạng |
+| Thử Ctrl+K trên trình duyệt thật; xem board trên điện thoại | A | Kéo thả và lọc đã thử (mục 4) |
+| Sửa script `dev` của web cho chạy được sau proxy (bỏ `--turbopack` hoặc tự host font) | A | Hiện phải chạy `next dev` bằng tay |
+| Review và merge PR #91 vào `dev` | A (B, C review) | CI đã xanh |
 | W5-A1, B3: tạo Neon DB, migrate, seed; deploy API lên Render | A, B | Cần tài khoản; làm từ máy có mạng |
 | W5-A2: deploy web lên Vercel, `NEXT_PUBLIC_API_URL`, `CORS_ORIGIN` | A | Sau W5-A1 |
 | Họp và demo M5 trên link online (W5-ALL) | Cả nhóm | Sau khi deploy |
@@ -73,6 +100,6 @@ Trên laptop ThinkPad, test web chạy lại cũng qua 79/79, sau khi sửa `nod
 
 ## 7. Chuẩn bị cho tuần 6
 
-- Test E2E bằng Playwright cho luồng đăng nhập → tạo issue → kéo thả (W6-A1). Playwright có hỗ trợ HTML5 DnD qua `dragTo`.
+- Test E2E bằng Playwright cho luồng đăng nhập → tạo issue → kéo thả (W6-A1). Playwright có hỗ trợ HTML5 DnD qua `dragTo`; các bước ở mục 4 dùng làm kịch bản được.
 - `empty-state` cho board và projects (W6-C1); xem lại board trên điện thoại vì HTML5 DnD không chạy trên màn hình cảm ứng.
 - `docs/api/`, `docs/database/` (W6-B2).
